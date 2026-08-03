@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { Grade } from './grades.model';
 import { GradeService } from './grades.service';
 import { InfoGrade } from './info-grade/info-grade';
+import { CreateUpdateGrades } from './create-update-grades/create-update-grades';
 
 @Component({
   selector: 'app-grades',
   standalone: true,
-  imports: [FormsModule, InfoGrade],
+  imports: [FormsModule, InfoGrade, CreateUpdateGrades],
   templateUrl: './grades.html',
   styleUrl: './grades.css',
 })
@@ -54,19 +55,24 @@ export class Grades {
   }
 
   onAdd(): void {
-
+    this.gradeToEdit.set(null);
+    this.isFormModalOpen.set(true);
   }
 
   onEdit(grade: Grade): void {
-
+    this.gradeToEdit.set(grade);
+    this.isFormModalOpen.set(true);
   }
 
   onCloseFormModal(): void {
-
+    this.isFormModalOpen.set(false);
+    this.gradeToEdit.set(null);
   }
 
   onSaved(): void {
-
+    this.isFormModalOpen.set(false);
+    this.gradeToEdit.set(null);
+    this.fetchGrades();
   }
 
   onInfo(grade: Grade): void {

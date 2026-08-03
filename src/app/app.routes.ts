@@ -6,6 +6,13 @@ import { Grades } from './admin/grades/grades';
 import { Sections } from './admin/sections/sections';
 import { Years } from './admin/years/years';
 import { TimeSlots } from './admin/time-slots/time-slots';
+import { AcademicStaff } from './admin/academic-staff/academic-staff';
+import { Registrations } from './admin/registrations/registrations';
+import { SchoolDays } from './admin/school-days/school-days';
+import { TeachingBlocks } from './admin/teaching-blocks/teaching-blocks';
+import { Weightings } from './admin/weightings/weightings';
+import { Schedules } from './admin/schedules/schedules';
+import { TeacherGroups } from './admin/teacher-groups/teacher-groups';
 
 export const routes: Routes = [
   {
@@ -38,8 +45,36 @@ export const routes: Routes = [
         component: Years
       },
       {
+        path: 'teaching-blocks',
+        component: TeachingBlocks
+      },
+      {
+        path: 'school-days',
+        component: SchoolDays
+      },
+      {
         path: 'time-slots',
         component: TimeSlots
+      },
+      {
+        path: 'weightings',
+        component: Weightings
+      },
+      {
+        path: 'academic-staff',
+        component: AcademicStaff
+      },
+      {
+        path: 'registrations',
+        component: Registrations
+      },
+      {
+        path: 'schedules',
+        component: Schedules
+      },
+      {
+        path: 'teacher-groups',
+        component: TeacherGroups
       }
     ]
   }

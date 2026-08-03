@@ -31,7 +31,6 @@ export class TimeSlots {
 
   filteredTimeSlots = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
-
     if (!term) return this.timeSlots();
 
     return this.timeSlots().filter(timeSlot =>

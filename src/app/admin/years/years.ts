@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { Year } from './years.model';
 import { YearService } from './years.service';
 import { InfoYear } from './info-year/info-year';
+import { CreateUpdateYears } from './create-update-years/create-update-years';
 
 @Component({
   selector: 'app-years',
-  imports: [FormsModule, InfoYear],
+  imports: [FormsModule, InfoYear, CreateUpdateYears],
   templateUrl: './years.html',
   styleUrl: './years.css',
   standalone: true
@@ -54,19 +55,24 @@ export class Years {
   }
 
   onAdd(): void {
-
+    this.yearToEdit.set(null);
+    this.isFormModalOpen.set(true);
   }
 
   onEdit(year: Year): void {
-
+    this.yearToEdit.set(year);
+    this.isFormModalOpen.set(true);
   }
 
   onCloseFormModal(): void {
-
+    this.yearToEdit.set(null);
+    this.isFormModalOpen.set(false);
   }
 
   onSaved(): void {
-
+    this.isFormModalOpen.set(false);
+    this.yearToEdit.set(null);
+    this.fetchYears();
   }
 
   onInfo(year: Year): void {

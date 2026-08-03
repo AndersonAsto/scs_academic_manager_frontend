@@ -1,0 +1,137 @@
+<div class="school-days-page">
+
+    <div class="page-header">
+        <div>
+            <h1>Días Lectivos</h1>
+            <p class="subtitle">Gestiona los días lectivos de cada bimestre.</p>
+        </div>
+        <button class="btn-primary" (click)="onAdd()">
+            <i class="fa-solid fa-plus"></i>
+            <span>Agregar Días Lectivos</span>
+        </button>
+    </div>
+
+    <div class="filters-container">
+        <div class="filters-header">
+            <i class="fa-solid fa-filter"></i>
+            <span>Filtros</span>
+        </div>
+
+        <div class="filters-content">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Buscar día lectivo..." [ngModel]="searchTerm()"
+                    (ngModelChange)="searchTerm.set($event)" />
+            </div>
+
+            <div class="filter-select">
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <select [ngModel]="selectedYear()" (ngModelChange)="selectedYear.set($event)">
+                    <option [ngValue]="null">
+                        Todos los años
+                    </option>
+
+                    @for (year of years(); track year.id) {
+                    <option [ngValue]="year.id">
+                        {{ year.year }}
+                    </option>
+                    }
+                </select>
+            </div>
+
+            <div class="filter-select">
+                <i class="fa-solid fa-layer-group"></i>
+                <select [ngModel]="selectedTeachingBlock()" (ngModelChange)="selectedTeachingBlock.set($event)"
+                    [disabled]="teachingBlocks().length === 0">
+                    <option [ngValue]="null">
+                        @if(selectedYear() === null){
+                        Todos los bloques
+                        } @else {
+                        Todos los bloques del año
+                        }
+                    </option>
+                    @for(block of teachingBlocks(); track block.id){
+                    <option [ngValue]="block.id">
+                        {{ block.teaching_block }}
+                    </option>
+                    }
+                </select>
+            </div>
+
+            <button class="btn-clear" (click)="clearFilters()"><i class="fa-solid fa-rotate-left"></i>Limpiar</button>
+        </div>
+    </div>
+
+    @if (loading()) {
+    <div class="state-message">Cargando días lectivos...</div>
+    } @else if (error()) {
+    <div class="state-message error">{{ error() }}</div>
+    } @else if (filteredSchoolDays().length === 0) {
+    <div class="state-message">No se encontraron días lectivos.</div>
+    } @else {
+    <div class="generics-list">
+        @for (schoolDay of filteredSchoolDays(); track schoolDay.id) {
+        <div class="generic-card">
+            <div class="generic-info">
+                <span class="generic-id">
+                    #{{ schoolDay.id }}
+                </span>
+                <div class="generic-content">
+                    <span class="generic-name">
+                        {{ schoolDay.day }} - {{ schoolDay.school_day }}
+                    </span>
+
+                    <span class="generic-detail">
+                        Año Lectivo: {{ schoolDay.teaching_block.year.year }}
+                    </span>
+
+                    <span class="generic-detail">
+                        Bloque Lectivo: {{ schoolDay.teaching_block.teaching_block }}
+                    </span>
+
+                    <span class="generic-detail">
+                        Semana: {{ schoolDay.week_number }} | Tipo: {{ schoolDay.type }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="generic-actions">
+                <div class="info-item">
+                    <span class="status-badge" [class.inactive]="!schoolDay.status">
+                        {{ schoolDay.status ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </div>
+                <button class="icon-btn info" (click)="onInfo(schoolDay)" aria-label="Más información">
+                    <i class="fa-solid fa-circle-info"></i>
+                </button>
+                <button class="icon-btn edit" (click)="onEdit(schoolDay)" aria-label="Actualizar">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+                <button class="icon-btn delete" (click)="onDelete(schoolDay)" aria-label="Eliminar">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+
+        </div>
+        }
+    </div>
+    }
+
+</div>
+
+<!--
+<app-creation-update-grades
+    [isOpen]="isFormModalOpen()"
+    [gradeToEdit]="gradeToEdit()"
+    (closeModal)="onCloseFormModal()"
+    (saved)="onSaved()"
+/>
+
+
+<app-info-time-slots
+    [isOpen]="isInfoModalOpen()"
+    [timeSlot]="timeSlotToView()"
+    (closeModal)="onCloseInfoModal()"
+/>
+-->

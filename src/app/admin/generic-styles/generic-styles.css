@@ -205,3 +205,14 @@
     background: rgba(179, 65, 47, .12);
     color: #b3412f;
 }
+
+.generic-content{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.generic-detail{
+    font-size:13px;
+    color:#6b7a67;
+}

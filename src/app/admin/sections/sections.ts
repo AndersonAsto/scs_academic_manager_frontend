@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { Section } from './sections.model';
 import { SectionService } from './sections.service';
 import { InfoSection } from './info-section/info-section';
+import { CreateUpdateSection } from './create-update-section/create-update-section';
 
 @Component({
   selector: 'app-sections',
   standalone: true,
-  imports: [FormsModule, InfoSection],
+  imports: [FormsModule, InfoSection, CreateUpdateSection],
   templateUrl: './sections.html',
   styleUrl: './sections.css',
 })
@@ -54,19 +55,24 @@ export class Sections {
   }
 
   onAdd(): void {
-
+    this.sectionToEdit.set(null);
+    this.isFormModalOpen.set(true);
   }
 
   onEdit(section: Section): void {
-
+    this.sectionToEdit.set(section);
+    this.isFormModalOpen.set(true);
   }
 
   onCloseFormModal(): void {
-
+    this.isFormModalOpen.set(false);
+    this.sectionToEdit.set(null);
   }
 
   onSaved(): void {
-
+    this.isFormModalOpen.set(false);
+    this.sectionToEdit.set(null);
+    this.fetchSections();
   }
 
   onInfo(section: Section): void {
