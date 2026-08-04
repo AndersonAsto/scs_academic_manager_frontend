@@ -7,7 +7,7 @@ import { TeachingBlockService } from './teaching-blocks.service';
 
 @Component({
   selector: 'app-teaching-blocks',
-  imports: [FormsModule],
+  imports: [FormsModule, InfoTeachingBlocks],
   templateUrl: './teaching-blocks.html',
   styleUrl: './teaching-blocks.css',
   standalone: true

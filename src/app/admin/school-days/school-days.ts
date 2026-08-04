@@ -2,10 +2,11 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SchoolDay } from './school-days.model';
 import { SchoolDaysService } from './school-days.service';
+import { InfoSchoolDays } from './info-school-days/info-school-days';
 
 @Component({
   selector: 'app-school-days',
-  imports: [FormsModule],
+  imports: [FormsModule, InfoSchoolDays],
   standalone: true,
   templateUrl: './school-days.html',
   styleUrl: './school-days.css',

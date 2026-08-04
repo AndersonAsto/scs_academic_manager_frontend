@@ -1,1 +1,116 @@
-<p>academic-staff works!</p>
+<div class="academic-staff-page">
+
+    <div class="page-header">
+        <div>
+            <h1>Personal Académico</h1>
+            <p class="subtitle">Gestiona el personal académico de la institución educativa, incluyendo sus contratos e
+                información personal.</p>
+        </div>
+        <button class="btn-primary" (click)="onAdd()">
+            <i class="fa-solid fa-plus"></i>
+            <span>Agregar Personal Académico</span>
+        </button>
+    </div>
+
+    <div class="filters-container">
+
+        <div class="filters-header">
+            <i class="fa-solid fa-filter"></i>
+            <span>Filtros</span>
+        </div>
+
+        <div class="filters-content">
+
+            <!-- Buscador -->
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Buscar personal académico, DNI, correo, teléfono o fechas..."
+                    [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" />
+            </div>
+
+            <!-- Tipo de Personal -->
+            <div class="filter-select">
+                <i class="fa-solid fa-user-tie"></i>
+
+                <select [ngModel]="selectedStaffType()" (ngModelChange)="selectedStaffType.set($event)">
+                    <option [ngValue]="null">
+                        Todo el personal
+                    </option>
+
+                    @for(type of staffTypes(); track type){
+                    <option [ngValue]="type">
+                        {{ type }}
+                    </option>
+                    }
+                </select>
+            </div>
+
+            <button class="btn-clear" (click)="clearFilters()">
+                <i class="fa-solid fa-rotate-left"></i>
+                Limpiar
+            </button>
+
+        </div>
+
+    </div>
+
+    @if (loading()) {
+    <div class="state-message">Cargando ...</div>
+    } @else if (error()) {
+    <div class="state-message error">{{ error() }}</div>
+    } @else if (filteredAcademicStaff().length === 0) {
+    <div class="state-message">No se encontro el personal académico.</div>
+    } @else {
+    <div class="generics-list">
+        @for (academicStaff of filteredAcademicStaff(); track academicStaff.id) {
+        <div class="generic-card">
+            <div class="generic-info">
+                <span class="generic-id">
+                    #{{ academicStaff.id }}
+                </span>
+                <div class="generic-content">
+                    <span class="generic-name">
+                        {{ academicStaff.staff_type }}: {{ academicStaff.personal_information.names + '
+                        '
+                        +
+                        academicStaff.personal_information.fathers_surname + ' ' +
+                        academicStaff.personal_information.mothers_surname }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="generic-actions">
+                <div class="info-item">
+                    <span class="status-badge" [class.inactive]="!academicStaff.status">
+                        {{ academicStaff.status ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </div>
+                <button class="icon-btn info" (click)="onInfo(academicStaff)" aria-label="Contratos">
+                    <i class="fa-solid fa-file-contract"></i>
+                </button>
+                <button class="icon-btn info" (click)="onInfo(academicStaff)" aria-label="Usuario">
+                    <i class="fa-solid fa-users-gear"></i>
+                </button>
+                <button class="icon-btn info" (click)="onInfo(academicStaff)" aria-label="Más información">
+                    <i class="fa-solid fa-circle-info"></i>
+                </button>
+                <button class="icon-btn edit" (click)="onEdit(academicStaff)" aria-label="Actualizar">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+                <button class="icon-btn delete" (click)="onDelete(academicStaff)" aria-label="Eliminar">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+
+        </div>
+        }
+    </div>
+    }
+
+</div>
+
+<app-info-academic-staff
+    [isOpen]="isInfoModalOpen()"
+    [academicStaff]="academicStaffToView()"
+    (closeModal)="onCloseInfoModal()"
+/>

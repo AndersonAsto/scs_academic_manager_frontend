@@ -1,15 +1,16 @@
 import { Component, input, output } from '@angular/core';
-import { Weighting } from '../weightings.model';
+import { Registration } from '../registration.model';
 
 @Component({
-  selector: 'app-info-weightings',
+  selector: 'app-info-registration',
   imports: [],
-  templateUrl: './info-weightings.html',
-  styleUrl: './info-weightings.css',
+  standalone: true,
+  templateUrl: './info-registration.html',
+  styleUrl: './info-registration.css',
 })
-export class InfoWeightings {
+export class InfoRegistration {
   isOpen = input<boolean>(false);
-  weighting = input<Weighting | null>(null);
+  registration = input<Registration | null>(null);
 
   closeModal = output<void>();
 

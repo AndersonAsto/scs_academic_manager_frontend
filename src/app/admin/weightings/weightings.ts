@@ -7,7 +7,7 @@ import { WeightingsService } from './weightings.service';
 
 @Component({
   selector: 'app-weightings',
-  imports: [FormsModule],
+  imports: [FormsModule, InfoWeightings],
   standalone: true,
   templateUrl: './weightings.html',
   styleUrl: './weightings.css',

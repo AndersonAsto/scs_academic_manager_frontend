@@ -13,15 +13,10 @@
     <nav>
 
         @for(item of menu; track item.route){
-
         <a [routerLink]="item.route" routerLinkActive="active">
-
             <i [class]="item.icon"></i>
-
             <span class="nav-text">{{ item.title }}</span>
-
         </a>
-
         }
 
     </nav>

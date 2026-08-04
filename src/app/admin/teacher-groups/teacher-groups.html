@@ -143,7 +143,7 @@
     </div>
 
     @if (loading()) {
-    <div class="state-message">Cargando grupos de docente...</div>
+    <div class="state-message">Cargando grupos de docentes...</div>
     } @else if (error()) {
     <div class="state-message error">{{ error() }}</div>
     } @else if (filteredTeacherGroups().length === 0) {
@@ -211,11 +211,10 @@
     (closeModal)="onCloseFormModal()"
     (saved)="onSaved()"
 />
+-->
 
-
-<app-info-time-slots
+<app-info-teacher-groups
     [isOpen]="isInfoModalOpen()"
-    [timeSlot]="timeSlotToView()"
+    [teacherGroup]="teacherGroupToView()"
     (closeModal)="onCloseInfoModal()"
 />
--->

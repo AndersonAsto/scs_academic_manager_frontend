@@ -7,7 +7,7 @@ import { CreateUpdateTeacherGroups } from './create-update-teacher-groups/create
 
 @Component({
   selector: 'app-teacher-groups',
-  imports: [FormsModule],
+  imports: [FormsModule, InfoTeacherGroups],
   templateUrl: './teacher-groups.html',
   styleUrl: './teacher-groups.css',
 })
