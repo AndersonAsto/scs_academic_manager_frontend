@@ -27,7 +27,7 @@
             <div class="filter-select">
                 <i class="fa-solid fa-calendar-days"></i>
 
-                <select [ngModel]="selectedYear()" (ngModelChange)="selectedYear.set($event)">
+                <select [ngModel]="selectedYear()" (ngModelChange)="onYearChange($event)">
                     <option [ngValue]="null">
                         Todos los años
                     </option>
@@ -120,14 +120,18 @@
 
 </div>
 
-<!--
-<app-creation-update-grades
-    [isOpen]="isFormModalOpen()"
-    [gradeToEdit]="gradeToEdit()"
-    (closeModal)="onCloseFormModal()"
+<app-create-school-days
+    [isOpen]="isCreateModalOpen()"
+    (closeModal)="onCloseCreateModal()"
     (saved)="onSaved()"
 />
--->
+
+<app-update-school-days
+    [isOpen]="isUpdateModalOpen()"
+    [schoolDay]="schoolDayToEdit()"
+    (closeModal)="onCloseUpdateModal()"
+    (saved)="onSaved()"
+/>
 
 <app-info-school-days
     [isOpen]="isInfoModalOpen()"

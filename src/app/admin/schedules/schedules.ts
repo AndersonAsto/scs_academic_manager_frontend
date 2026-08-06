@@ -8,7 +8,7 @@ import { DeleteSchedules } from './delete-schedules/delete-schedules';
 
 @Component({
   selector: 'app-schedules',
-  imports: [FormsModule, InfoSchedules],
+  imports: [FormsModule, InfoSchedules, CreateUpdateSchedules],
   standalone: true,
   templateUrl: './schedules.html',
   styleUrl: './schedules.css',

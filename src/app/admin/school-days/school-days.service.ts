@@ -14,6 +14,15 @@ export interface SchoolDaysPayload {
     description: string | null;
 };
 
+export interface CreateSchoolDaysPayload {
+    year_id: number;
+}
+
+export interface UpdateSchoolDayPayload {
+    type: string,
+    description: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class SchoolDaysService {
     private http = inject(HttpClient);
@@ -25,11 +34,11 @@ export class SchoolDaysService {
             .pipe(map(response => response.data));
     }
 
-    create(payload: SchoolDaysPayload): Observable<{ message: string }> {
+    create(payload: CreateSchoolDaysPayload): Observable<{ message: string }> {
         return this.http.post<{ message: string }>(`${this.baseUrl}/create`, payload);
     }
 
-    update(id: number, payload: SchoolDaysPayload): Observable<SchoolDay> {
+    update(id: number, payload: UpdateSchoolDayPayload): Observable<SchoolDay> {
         return this.http.put<SchoolDay>(`${this.baseUrl}/update/${id}`, payload);
     }
 

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateUpdateWeightings } from './create-update-weightings';
+import { UpdateWeighting } from './update-weighting';
 
-describe('CreateUpdateWeightings', () => {
-  let component: CreateUpdateWeightings;
-  let fixture: ComponentFixture<CreateUpdateWeightings>;
+describe('UpdateWeighting', () => {
+  let component: UpdateWeighting;
+  let fixture: ComponentFixture<UpdateWeighting>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateUpdateWeightings],
+      imports: [UpdateWeighting],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CreateUpdateWeightings);
+    fixture = TestBed.createComponent(UpdateWeighting);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -4,10 +4,11 @@ import { InfoTeachingBlocks } from './info-teaching-blocks/info-teaching-blocks'
 import { CreateTeachingBlocks } from './create-teaching-blocks/create-teaching-blocks';
 import { TeachingBlock } from './teaching-blocks.model';
 import { TeachingBlockService } from './teaching-blocks.service';
+import { UpdateTeachingBlock } from '../teaching-blocks/update-teaching-block/update-teaching-block';
 
 @Component({
   selector: 'app-teaching-blocks',
-  imports: [FormsModule, InfoTeachingBlocks],
+  imports: [FormsModule, InfoTeachingBlocks, CreateTeachingBlocks, UpdateTeachingBlock],
   templateUrl: './teaching-blocks.html',
   styleUrl: './teaching-blocks.css',
   standalone: true
@@ -20,7 +21,9 @@ export class TeachingBlocks {
   error = signal<string | null>(null);
   searchTerm = signal('');
 
-  isFormModalOpen = signal(false);
+  isCreateModalOpen = signal(false);
+
+  isUpdateModalOpen = signal(false);
   teachingToEdit = signal<TeachingBlock | null>(null);
 
   isInfoModalOpen = signal(false);
@@ -67,22 +70,28 @@ export class TeachingBlocks {
   }
 
   onAdd(): void {
-    this.teachingToEdit.set(null);
-    this.isFormModalOpen.set(true);
+    //this.teachingToEdit.set(null);
+    this.isCreateModalOpen.set(true);
   }
 
   onEdit(teachingBlock: TeachingBlock): void {
     this.teachingToEdit.set(teachingBlock);
-    this.isFormModalOpen.set(true);
+    this.isUpdateModalOpen.set(true);
+  }
+
+  onCloseUpdateModal(): void {
+    this.isUpdateModalOpen.set(false);
+    this.teachingToEdit.set(null);
   }
 
   onCloseFormModal(): void {
-    this.teachingToEdit.set(null);
-    this.isFormModalOpen.set(false);
+    //this.teachingToEdit.set(null);
+    this.isUpdateModalOpen.set(false);
   }
 
   onSaved(): void {
-    this.isFormModalOpen.set(false);
+    this.isCreateModalOpen.set(false);
+    this.isUpdateModalOpen.set(false);
     this.teachingToEdit.set(null);
     this.fetchTeachingBlocks();
   }
@@ -95,6 +104,10 @@ export class TeachingBlocks {
   onCloseInfoModal(): void {
     this.isInfoModalOpen.set(false);
     this.teachingToView.set(null);
+  }
+
+  onCloseCreateModal(): void {
+    this.isCreateModalOpen.set(false);
   }
 
   onDelete(teachingBlock: TeachingBlock): void {

@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { TimeSlot } from './time-slots.model';
 import { TimeSlotService } from './time-slots.service';
 import { InfoTimeSlots } from './info-time-slots/info-time-slots';
+import { CreateUpdateTimeSlots } from './create-update-time-slots/create-update-time-slots';
 
 @Component({
   selector: 'app-time-slots',
-  imports: [FormsModule, InfoTimeSlots],
+  imports: [FormsModule, InfoTimeSlots, CreateUpdateTimeSlots],
   standalone: true,
   templateUrl: './time-slots.html',
   styleUrl: './time-slots.css',
@@ -58,19 +59,24 @@ export class TimeSlots {
   }
 
   onAdd(): void {
-
+    this.timeSlotToEdit.set(null);
+    this.isFormModalOpen.set(true);
   }
 
   onEdit(timeSlot: TimeSlot): void {
-
+    this.timeSlotToEdit.set(timeSlot),
+    this.isFormModalOpen.set(true);
   }
 
   onCloseFormModal(): void {
-
+    this.isFormModalOpen.set(false);
+    this.timeSlotToEdit.set(null);
   }
 
   onSaved(): void {
-
+    this.isFormModalOpen.set(false);
+    this.timeSlotToEdit.set(null);
+    this.fetchTimeSlots();
   }
 
   onInfo(timeSlot: TimeSlot): void {

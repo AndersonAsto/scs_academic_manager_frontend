@@ -1,13 +1,14 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InfoWeightings } from './info-weightings/info-weightings';
-import { CreateUpdateWeightings } from './create-update-weightings/create-update-weightings';
 import { Weighting } from './weightings.model';
 import { WeightingsService } from './weightings.service';
+import { CreateWeightings } from './create-weightings/create-weightings';
+import { UpdateWeighting } from './update-weighting/update-weighting';
 
 @Component({
   selector: 'app-weightings',
-  imports: [FormsModule, InfoWeightings],
+  imports: [FormsModule, InfoWeightings, CreateWeightings, UpdateWeighting],
   standalone: true,
   templateUrl: './weightings.html',
   styleUrl: './weightings.css',
@@ -15,12 +16,13 @@ import { WeightingsService } from './weightings.service';
 export class Weightings {
   private weightingService = inject(WeightingsService);
 
-  weightings = signal<Weighting[]>([]);
+  weighting = signal<Weighting[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   searchTerm = signal('');
 
-  isFormModalOpen = signal(false);
+  isCreateModalOpen = signal(false);
+  isUpdateModalOpen = signal(false);
   weightingToEdit = signal<Weighting | null>(null);
 
   isInfoModalOpen = signal(false);
@@ -34,7 +36,7 @@ export class Weightings {
     const term = this.searchTerm().toLowerCase().trim();
     const year = this.selectedYear();
 
-    return this.weightings().filter(w => {
+    return this.weighting().filter(w => {
       const matchesSearch =
         !term ||
         w.weighting.toString().toLowerCase().includes(term) ||
@@ -55,7 +57,7 @@ export class Weightings {
 
     this.weightingService.list().subscribe({
       next: (data) => {
-        this.weightings.set(data);
+        this.weighting.set(data);
         this.loading.set(false);
       },
       error: () => {
@@ -66,22 +68,26 @@ export class Weightings {
   }
 
   onAdd(): void {
-    this.weightingToEdit.set(null);
-    this.isFormModalOpen.set(true);
+    this.isCreateModalOpen.set(true);
   }
 
   onEdit(weighting: Weighting): void {
     this.weightingToEdit.set(weighting);
-    this.isFormModalOpen.set(true);
+    this.isUpdateModalOpen.set(true);
   }
 
-  onCloseFormModal(): void {
+  onCloseCreateModal(): void {
+    this.isCreateModalOpen.set(false);
+  }
+
+  onCloseUpdateModal(): void {
     this.weightingToEdit.set(null);
-    this.isFormModalOpen.set(false);
+    this.isUpdateModalOpen.set(false);
   }
 
   onSaved(): void {
-    this.isFormModalOpen.set(false);
+    this.isCreateModalOpen.set(false);
+    this.isUpdateModalOpen.set(false);
     this.weightingToEdit.set(null);
     this.fetchWeighting();
   }
@@ -101,7 +107,7 @@ export class Weightings {
   }
 
   years = computed(() => {
-    const years = this.weightings()
+    const years = this.weighting()
       .map(w => w.year);
     return years.filter(
       (year, index, array) =>

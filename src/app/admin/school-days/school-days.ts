@@ -3,10 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { SchoolDay } from './school-days.model';
 import { SchoolDaysService } from './school-days.service';
 import { InfoSchoolDays } from './info-school-days/info-school-days';
+import { CreateSchoolDays } from './create-school-days/create-school-days';
+import { UpdateSchoolDays } from './update-school-days/update-school-days';
 
 @Component({
   selector: 'app-school-days',
-  imports: [FormsModule, InfoSchoolDays],
+  imports: [FormsModule, InfoSchoolDays, CreateSchoolDays, UpdateSchoolDays],
   standalone: true,
   templateUrl: './school-days.html',
   styleUrl: './school-days.css',
@@ -19,7 +21,8 @@ export class SchoolDays {
   error = signal<string | null>(null);
   searchTerm = signal('');
 
-  isFormModalOpen = signal(false);
+  isCreateModalOpen = signal(false);
+  isUpdateModalOpen = signal(false);
   schoolDayToEdit = signal<SchoolDay | null>(null);
 
   isInfoModalOpen = signal(false);
@@ -73,22 +76,26 @@ export class SchoolDays {
   }
 
   onAdd(): void {
-    this.schoolDayToEdit.set(null);
-    this.isFormModalOpen.set(true);
+    this.isCreateModalOpen.set(true);
   }
 
   onEdit(schoolDay: SchoolDay): void {
     this.schoolDayToEdit.set(schoolDay);
-    this.isFormModalOpen.set(true);
+    this.isUpdateModalOpen.set(true);
   }
 
-  onCloseFormModal(): void {
+  onCloseCreateModal(): void {
+    this.isCreateModalOpen.set(false);
+  }
+
+  onCloseUpdateModal(): void {
     this.schoolDayToEdit.set(null);
-    this.isFormModalOpen.set(false);
+    this.isUpdateModalOpen.set(false);
   }
 
   onSaved(): void {
-    this.isFormModalOpen.set(false);
+    this.isCreateModalOpen.set(false);
+    this.isUpdateModalOpen.set(false);
     this.schoolDayToEdit.set(null);
     this.fetchSchoolDays();
   }

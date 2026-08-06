@@ -111,14 +111,18 @@
 
 </div>
 
-<!--
-<app-creation-update-grades
-    [isOpen]="isFormModalOpen()"
-    [gradeToEdit]="gradeToEdit()"
-    (closeModal)="onCloseFormModal()"
+<app-create-teaching-blocks
+    [isOpen]="isCreateModalOpen()"
+    (closeModal)="onCloseCreateModal()"
     (saved)="onSaved()"
 />
--->
+
+<app-update-teaching-block
+    [isOpen]="isUpdateModalOpen()"
+    [teachingBlock]="teachingToEdit()"
+    (closeModal)="onCloseUpdateModal()"
+    (saved)="onSaved()"
+/>
 
 <app-info-teaching-blocks
     [isOpen]="isInfoModalOpen()"

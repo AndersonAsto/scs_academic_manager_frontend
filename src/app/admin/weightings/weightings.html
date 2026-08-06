@@ -12,14 +12,12 @@
     </div>
 
     <div class="filters-container">
-
         <div class="filters-header">
             <i class="fa-solid fa-filter"></i>
             <span>Filtros</span>
         </div>
 
         <div class="filters-content">
-
             <div class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="text" placeholder="Buscar ponderación, tipo, año..." [ngModel]="searchTerm()"
@@ -28,31 +26,23 @@
 
             <div class="filter-select">
                 <i class="fa-solid fa-calendar-days"></i>
-
                 <select [ngModel]="selectedYear()" (ngModelChange)="selectedYear.set($event)">
                     <option [ngValue]="null">
                         Todos los años
                     </option>
-
                     @for (year of years(); track year.id) {
                     <option [ngValue]="year.id">
                         {{ year.year }}
                     </option>
                     }
-
                 </select>
             </div>
 
             <button class="btn-clear" (click)="clearFilters()">
-
                 <i class="fa-solid fa-rotate-left"></i>
-
                 Limpiar
-
             </button>
-
         </div>
-
     </div>
 
     @if (loading()) {
@@ -107,14 +97,19 @@
 
 </div>
 
-<!--
-<app-creation-update-grades
-    [isOpen]="isFormModalOpen()"
-    [gradeToEdit]="gradeToEdit()"
-    (closeModal)="onCloseFormModal()"
+<app-create-weightings
+    [isOpen]="isCreateModalOpen()"
+    (closeModal)="onCloseCreateModal()"
     (saved)="onSaved()"
 />
--->
+
+<app-update-weighting
+    [isOpen]="isUpdateModalOpen()"
+    [weighting]="weightingToEdit()"
+    (closeModal)="onCloseUpdateModal()"
+    (saved)="onSaved()"
+/>
+
 
 <app-info-weightings
     [isOpen]="isInfoModalOpen()"

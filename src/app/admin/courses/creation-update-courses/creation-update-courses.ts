@@ -31,7 +31,6 @@ export class CreationUpdateCourses {
   });
 
   constructor() {
-    // Sincroniza el formulario cada vez que cambia el curso a editar o se abre el modal
     effect(() => {
       const course = this.courseToEdit();
       if (this.isOpen()) {

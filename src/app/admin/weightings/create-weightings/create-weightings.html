@@ -3,51 +3,33 @@
     <div class="modal-panel modal-large" (click)="$event.stopPropagation()">
 
         <div class="modal-header">
-            <h2>Registrar Bloques Lectivos</h2>
+            <h2>Registrar Ponderaciones</h2>
 
-            <button
-                type="button"
-                class="close-btn"
-                (click)="onCancel()"
-                aria-label="Cerrar">
+            <button type="button" class="close-btn" (click)="onCancel()" aria-label="Cerrar">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
 
-        <form
-            [formGroup]="form"
-            (ngSubmit)="onSubmit()"
-            class="modal-form">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-form">
 
             <!-- Año -->
-
             <div class="field">
-
                 <label>
                     Año lectivo
                     <span class="required">*</span>
                 </label>
-
                 <div class="filter-select">
-
                     <i class="fa-solid fa-calendar-days"></i>
-
                     <select formControlName="year_id">
-
                         <option [ngValue]="null">
                             Seleccione un año
                         </option>
-
                         @for(year of years(); track year.id){
-
                         <option [ngValue]="year.id">
                             {{ year.id }} - {{ year.year }}
                         </option>
-
                         }
-
                     </select>
-
                 </div>
 
                 @if(form.get('year_id')?.invalid &&
@@ -63,37 +45,23 @@
 
             <div class="blocks-grid">
 
-                @for(block of teachingBlockOptions; track block){
+                @for(type of typeOptions; track type){
 
                 <div class="block-card">
 
-                    <h3>{{ block }}</h3>
+                    <h3>{{ type }}</h3>
 
                     <div class="field">
 
                         <label>
-                            Fecha de inicio
+                            Ponderación
                             <span class="required">*</span>
                         </label>
 
-                        <input
-                            type="date"
-                            [formControlName]="'start_day_' + $index">
+                        <input type="number" min="1" max="100" step="1" [formControlName]="'weighting_' + $index">
 
                     </div>
-                    <br>
-                    <div class="field">
 
-                        <label>
-                            Fecha de fin
-                            <span class="required">*</span>
-                        </label>
-
-                        <input
-                            type="date"
-                            [formControlName]="'end_day_' + $index">
-
-                    </div>
                     <br>
                     <div class="field">
 
@@ -101,10 +69,7 @@
                             Descripción
                         </label>
 
-                        <textarea
-                            rows="2"
-                            [formControlName]="'description_' + $index"
-                            placeholder="Opcional">
+                        <textarea rows="2" [formControlName]="'description_' + $index" placeholder="Opcional">
                         </textarea>
 
                     </div>
@@ -125,17 +90,11 @@
 
             <div class="modal-actions">
 
-                <button
-                    type="button"
-                    class="btn-secondary"
-                    (click)="onCancel()">
+                <button type="button" class="btn-secondary" (click)="onCancel()">
                     Cancelar
                 </button>
 
-                <button
-                    class="btn-primary"
-                    type="submit"
-                    [disabled]="submitting">
+                <button class="btn-primary" type="submit" [disabled]="submitting">
 
                     @if(submitting){
 
@@ -143,7 +102,7 @@
 
                     }@else{
 
-                    <span>Registrar bloques lectivos</span>
+                    <span>Registrar ponderaciones</span>
 
                     }
 
