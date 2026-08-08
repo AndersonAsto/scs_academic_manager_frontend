@@ -3,10 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { Registration } from './registration.model';
 import { RegistrationsService } from './registrations.service';
 import { InfoRegistration } from './info-registration/info-registration';
+import { CreateUpdateRegistration } from './create-update-registration/create-update-registration';
+import {
+  PersonalInfoUsersRegistrations,
+  PersonalInfoModalData,
+  EntityType
+} from './personal-info-users-registrations/personal-info-users-registrations';
 
 @Component({
   selector: 'app-registrations',
-  imports: [FormsModule, InfoRegistration],
+  imports: [FormsModule, InfoRegistration, CreateUpdateRegistration, PersonalInfoUsersRegistrations],
   standalone: true,
   templateUrl: './registrations.html',
   styleUrl: './registrations.css',
@@ -24,6 +30,13 @@ export class Registrations {
 
   isInfoModalOpen = signal(false);
   registrationToView = signal<Registration | null>(null);
+
+  isPersonModalOpen = signal(false);
+  personModalData = signal<PersonalInfoModalData | null>(null);
+
+  selectedYear = signal<number | null>(null);
+  selectedGrade = signal<number | null>(null);
+  selectedSection = signal<number | null>(null);
 
   constructor() {
     this.fetchRegistrations();
@@ -44,7 +57,7 @@ export class Registrations {
         student.dni,
         student.email,
         student.phone_number,
-        
+
         rg.registration_date,
 
         parent.names,
@@ -79,6 +92,32 @@ export class Registrations {
         matchesSection
       );
     });
+  });
+
+  grades = computed(() => {
+    const grades = this.registration().map(rg => rg.grade);
+
+    return grades.filter(
+      (grade, index, array) => index === array.findIndex(g => g.id === grade.id)
+    );
+  });
+
+  sections = computed(() => {
+    const sections = this.registration().map(rg => rg.section);
+
+    return sections.filter(
+      (section, index, array) =>
+        index === array.findIndex(s => s.id === section.id)
+    );
+  });
+
+  years = computed(() => {
+    const years = this.registration().map(rg => rg.year);
+
+    return years.filter(
+      (year, index, array) =>
+        index === array.findIndex(y => y.id === year.id)
+    );
   });
 
   fetchRegistrations(): void {
@@ -130,42 +169,35 @@ export class Registrations {
 
   onDelete(registration: Registration): void { }
 
-  selectedYear = signal<number | null>(null);
-  selectedGrade = signal<number | null>(null);
-  selectedSection = signal<number | null>(null);
+  onOpenPersonModal(registration: Registration, type: EntityType): void {
+    if (type === 'student') {
+      this.personModalData.set({
+        type: 'student',
+        entityId: registration.student.id,
+        personalInfo: registration.student.personal_information
+      });
+    } else {
+      this.personModalData.set({
+        type: 'parent',
+        entityId: registration.parent.id,
+        personalInfo: registration.parent.personal_information
+      });
+    }
+    this.isPersonModalOpen.set(true);
+  }
 
-  grades = computed(() => {
-    const grades = this.registration().map(rg => rg.grade);
+  onClosePersonModal(): void {
+    this.isPersonModalOpen.set(false);
+    this.personModalData.set(null);
+  }
 
-    return grades.filter(
-      (grade, index, array) => index === array.findIndex(g => g.id === grade.id)
-    );
-  });
-
-  sections = computed(() => {
-    const sections = this.registration().map(rg => rg.section);
-
-    return sections.filter(
-      (section, index, array) =>
-        index === array.findIndex(s => s.id === section.id)
-    );
-  });
-
-  years = computed(() => {
-
-    const years = this.registration()
-      .map(rg => rg.year);
-
-    return years.filter(
-      (year, index, array) =>
-        index === array.findIndex(y => y.id === year.id)
-    );
-
-  });
+  onPersonSaved(): void {
+    this.onClosePersonModal();
+    this.fetchRegistrations();
+  }
 
   clearFilters(): void {
     this.searchTerm.set('');
-
     this.selectedYear.set(null);
     this.selectedGrade.set(null);
     this.selectedSection.set(null);

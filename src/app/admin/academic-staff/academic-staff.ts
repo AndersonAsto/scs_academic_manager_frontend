@@ -3,11 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { AcademicStaffModel } from './academic-staff.model';
 import { AcademicStaffService } from './academic-staff.service';
 import { InfoAcademicStaff } from './info-academic-staff/info-academic-staff';
+import { CreateUpdateAcademicStaff } from './create-update-academic-staff/create-update-academic-staff';
+import { AcademicStaffContracts } from './academic-staff-contracts/academic-staff-contracts';
+import { AcademicStaffUsers } from './academic-staff-users/academic-staff-users';
 
 @Component({
   selector: 'app-academic-staff',
   standalone: true,
-  imports: [FormsModule, InfoAcademicStaff],
+  imports: [FormsModule, InfoAcademicStaff, CreateUpdateAcademicStaff, AcademicStaffContracts, AcademicStaffUsers],
   templateUrl: './academic-staff.html',
   styleUrl: './academic-staff.css',
 })
@@ -120,5 +123,34 @@ export class AcademicStaff {
     this.searchTerm.set('');
 
     this.selectedStaffType.set(null);
+  }
+
+  isContractsModalOpen = signal(false);
+  academicStaffContractsToView = signal<AcademicStaffModel | null>(null);
+
+  onContracts(staff: AcademicStaffModel): void {
+    this.academicStaffContractsToView.set(staff);
+    this.isContractsModalOpen.set(true);
+  }
+
+  onCloseContractsModal(): void {
+    this.isContractsModalOpen.set(false);
+    this.academicStaffContractsToView.set(null);
+  }
+
+  // Señales para el modal de usuarios
+  isUsersModalOpen = signal(false);
+  academicStaffUserToView = signal<AcademicStaffModel | null>(null);
+
+  // Abrir modal de usuario
+  onUsers(staff: AcademicStaffModel): void {
+    this.academicStaffUserToView.set(staff);
+    this.isUsersModalOpen.set(true);
+  }
+
+  // Cerrar modal de usuario
+  onCloseUsersModal(): void {
+    this.isUsersModalOpen.set(false);
+    this.academicStaffUserToView.set(null);
   }
 }

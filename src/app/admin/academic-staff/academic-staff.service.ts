@@ -11,6 +11,55 @@ export interface AcademicStaffPayload {
     description: string | null;
 }
 
+export interface SaveAcademicStaffPayload {
+
+    academic_staff_id?: number;
+
+    names?: string;
+    fathers_surname?: string;
+    mothers_surname?: string;
+    dni?: string;
+    email?: string;
+    phone_number?: string;
+    address?: string;
+    district?: string;
+    province?: string;
+    department?: string;
+    gender?: string;
+
+    role: string;
+    position: string;
+
+    start_date: string;
+    end_date: string;
+
+    description: string | null;
+
+}
+
+export interface UpdateAcademicStaffPayload {
+
+    staff_type: string;
+
+    names: string;
+    fathers_surname: string;
+    mothers_surname: string;
+
+    dni: string;
+    email: string;
+    phone_number: string;
+
+    address: string;
+    district: string;
+    province: string;
+    department: string;
+
+    gender: string;
+
+    description: string | null;
+
+}
+
 @Injectable({ providedIn: 'root' })
 export class AcademicStaffService {
     private http = inject(HttpClient);
@@ -22,11 +71,11 @@ export class AcademicStaffService {
             .pipe(map(response => response.data));
     }
 
-    create(payload: AcademicStaffPayload): Observable<{ message: string }> {
+    create(payload: SaveAcademicStaffPayload): Observable<{ message: string }> {
         return this.http.post<{ message: string }>(`${this.baseUrl}/create`, payload);
     }
 
-    update(id: number, payload: AcademicStaffPayload): Observable<AcademicStaffModel> {
+    update(id: number, payload: UpdateAcademicStaffPayload): Observable<AcademicStaffModel> {
         return this.http.put<AcademicStaffModel>(`${this.baseUrl}/update/${id}`, payload);
     }
 

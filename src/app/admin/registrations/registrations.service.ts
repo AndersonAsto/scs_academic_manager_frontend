@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../services/api-response.service';
 import { Registration } from './registration.model';
+import { PersonalInformationPayload } from '../personal-information/personal-information.service';
 
 export interface RegistrationPayload {
     year_id: number;
@@ -16,6 +17,30 @@ export interface RegistrationPayload {
     description: string | null;
 }
 
+export interface SaveRegistrationPayload {
+    year_id: number;
+    grade_id: number;
+    section_id: number;
+    registration_date: string;
+    description: string | null;
+
+    parent_id?: number;
+    student_id?: number;
+
+    parent?: PersonalInformationPayload;
+    student?: PersonalInformationPayload;
+}
+
+export interface UpdateRegistrationPayload {
+    year_id: number;
+    grade_id: number;
+    section_id: number;
+    parent_id: number;
+    registration_date: string;
+    description: string | null;
+}
+
+
 @Injectable({ providedIn: 'root' })
 export class RegistrationsService {
     private http = inject(HttpClient);
@@ -27,11 +52,11 @@ export class RegistrationsService {
             .pipe(map(response => response.data));
     }
 
-    create(payload: RegistrationPayload): Observable<{ message: string }> {
+    create(payload: SaveRegistrationPayload): Observable<{ message: string }> {
         return this.http.post<{ message: string }>(`${this.baseUrl}/create`, payload);
     }
 
-    update(id: number, payload: RegistrationPayload): Observable<Registration> {
+    update(id: number, payload: UpdateRegistrationPayload): Observable<Registration> {
         return this.http.put<Registration>(`${this.baseUrl}/update/${id}`, payload);
     }
 

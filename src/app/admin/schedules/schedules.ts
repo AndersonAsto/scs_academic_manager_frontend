@@ -4,11 +4,12 @@ import { Schedule } from './schedules.model';
 import { SchedulesService } from './schedules.service';
 import { InfoSchedules } from './info-schedules/info-schedules';
 import { CreateUpdateSchedules } from './create-update-schedules/create-update-schedules';
-import { DeleteSchedules } from './delete-schedules/delete-schedules';
+import { CreateSchoolDaysBySchedules } from './create-school-days-by-schedules/create-school-days-by-schedules';
+import { SchoolDaysBySchedules } from './school-days-by-schedules/school-days-by-schedules';
 
 @Component({
   selector: 'app-schedules',
-  imports: [FormsModule, InfoSchedules, CreateUpdateSchedules],
+  imports: [FormsModule, InfoSchedules, CreateUpdateSchedules, CreateSchoolDaysBySchedules, SchoolDaysBySchedules],
   standalone: true,
   templateUrl: './schedules.html',
   styleUrl: './schedules.css',
@@ -26,6 +27,13 @@ export class Schedules {
 
   isInfoModalOpen = signal(false);
   scheduleToView = signal<Schedule | null>(null);
+
+  // Estados para Modal de Generación Masiva de Días Lectivos
+  isCreateSchoolDaysModalOpen = signal(false);
+
+  // Estados para Modal de Consulta de Días Lectivos por Horario
+  isSchoolDaysModalOpen = signal(false);
+  scheduleSelected = signal<Schedule | null>(null);
 
   constructor() {
     this.fetchSchedule();
@@ -158,6 +166,31 @@ export class Schedules {
   }
 
   onDelete(schedule: Schedule): void { }
+
+  // Métodos - Generar Días Lectivos por Año (Modal Global)
+  onOpenCreateSchoolDays(): void {
+    this.isCreateSchoolDaysModalOpen.set(true);
+  }
+
+  onCloseCreateSchoolDays(): void {
+    this.isCreateSchoolDaysModalOpen.set(false);
+  }
+
+  onSchoolDaysCreated(): void {
+    this.isCreateSchoolDaysModalOpen.set(false);
+    this.fetchSchedule();
+  }
+
+  // Métodos - Consultar Días Lectivos por Horario Específico
+  onViewSchoolDays(schedule: Schedule): void {
+    this.scheduleSelected.set(schedule);
+    this.isSchoolDaysModalOpen.set(true);
+  }
+
+  onCloseSchoolDaysModal(): void {
+    this.isSchoolDaysModalOpen.set(false);
+    this.scheduleSelected.set(null);
+  }
 
   selectedYear = signal<number | null>(null);
   selectedCourse = signal<number | null>(null);

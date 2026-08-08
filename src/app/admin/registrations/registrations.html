@@ -23,8 +23,8 @@
             <!-- Buscador -->
             <div class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Buscar estudiante, apoderado, año..."
-                    [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" />
+                <input type="text" placeholder="Buscar estudiante, apoderado, año..." [ngModel]="searchTerm()"
+                    (ngModelChange)="searchTerm.set($event)" />
             </div>
 
             <!-- Año -->
@@ -130,13 +130,22 @@
                         {{ registration.status ? 'Activo' : 'Inactivo' }}
                     </span>
                 </div>
-                <button class="icon-btn info" (click)="onInfo(registration)" aria-label="Estudiante">
-                    <i class="fa-solid fa-circle-user"></i>
+
+                <!-- Botón para Estudiante -->
+                <button class="icon-btn info" (click)="onOpenPersonModal(registration, 'student')" title="Estudiante"
+                    aria-label="Estudiante">
+                    <i class="fa-solid fa-graduation-cap"></i>
                 </button>
-                <button class="icon-btn info" (click)="onInfo(registration)" aria-label="Apoderado">
-                    <i class="fa-solid fa-circle-user"></i>
+
+                <!-- Botón para Apoderado -->
+                <button class="icon-btn info" (click)="onOpenPersonModal(registration, 'parent')" title="Apoderado"
+                    aria-label="Apoderado">
+                    <i class="fa-solid fa-user-tie"></i>
                 </button>
-                <button class="icon-btn info" (click)="onInfo(registration)" aria-label="Más información">
+
+                <!-- Información de la Matrícula -->
+                <button class="icon-btn info" (click)="onInfo(registration)" title="Más información"
+                    aria-label="Más información">
                     <i class="fa-solid fa-circle-info"></i>
                 </button>
                 <button class="icon-btn edit" (click)="onEdit(registration)" aria-label="Actualizar">
@@ -154,17 +163,12 @@
 
 </div>
 
-<!--
-<app-creation-update-grades
-    [isOpen]="isFormModalOpen()"
-    [gradeToEdit]="gradeToEdit()"
-    (closeModal)="onCloseFormModal()"
-    (saved)="onSaved()"
-/>
--->
+<app-create-update-registration [isOpen]="isFormModalOpen()" [registration]="registrationToEdit()"
+    (closeModal)="onCloseFormModal()" (saved)="onSaved()" />
 
-<app-info-registration
-    [isOpen]="isInfoModalOpen()"
-    [registration]="registrationToView()"
-    (closeModal)="onCloseInfoModal()"
-/>
+
+<app-info-registration [isOpen]="isInfoModalOpen()" [registration]="registrationToView()"
+    (closeModal)="onCloseInfoModal()" />
+
+<app-personal-info-users-registrations [isOpen]="isPersonModalOpen()" [data]="personModalData()"
+    (closeModal)="onClosePersonModal()" (saved)="onPersonSaved()" />

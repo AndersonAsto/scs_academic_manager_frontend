@@ -85,10 +85,10 @@
                         {{ academicStaff.status ? 'Activo' : 'Inactivo' }}
                     </span>
                 </div>
-                <button class="icon-btn info" (click)="onInfo(academicStaff)" aria-label="Contratos">
+                <button class="icon-btn info" (click)="onContracts(academicStaff)" aria-label="Contratos">
                     <i class="fa-solid fa-file-contract"></i>
                 </button>
-                <button class="icon-btn info" (click)="onInfo(academicStaff)" aria-label="Usuario">
+                <button class="icon-btn info" (click)="onUsers(academicStaff)" aria-label="Usuario">
                     <i class="fa-solid fa-users-gear"></i>
                 </button>
                 <button class="icon-btn info" (click)="onInfo(academicStaff)" aria-label="Más información">
@@ -109,8 +109,27 @@
 
 </div>
 
+<app-create-update-academic-staff
+    [isOpen]="isFormModalOpen()"
+    [academicStaff]="academicStaffToEdit()"
+    (closeModal)="onCloseFormModal()"
+    (saved)="onSaved()"
+/>
+
 <app-info-academic-staff
     [isOpen]="isInfoModalOpen()"
     [academicStaff]="academicStaffToView()"
     (closeModal)="onCloseInfoModal()"
+/>
+
+<app-academic-staff-contracts
+  [isOpen]="isContractsModalOpen()"
+  [academicStaff]="academicStaffContractsToView()"
+  (closeModal)="onCloseContractsModal()"
+/>
+
+<app-academic-staff-users
+    [isOpen]="isUsersModalOpen()"
+    [academicStaff]="academicStaffUserToView()"
+    (closeModal)="onCloseUsersModal()"
 />
