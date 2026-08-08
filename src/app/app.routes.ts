@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { Login } from './login/login';
 import { AdminLayoutComponent } from './admin/layout/admin-layout/admin-layout';
 import { Dashboard } from './admin/dashboard/dashboard';
 import { Courses } from './admin/courses/courses';
@@ -13,17 +14,29 @@ import { TeachingBlocks } from './admin/teaching-blocks/teaching-blocks';
 import { Weightings } from './admin/weightings/weightings';
 import { Schedules } from './admin/schedules/schedules';
 import { TeacherGroups } from './admin/teacher-groups/teacher-groups';
+import { ParentsLayout } from './parents/layout/parents-layout/parents-layout';
+import { ParentsDashboard } from './parents/dashboard/dashboard';
+import { TeachersDashboard } from './teachers/dashboard/dashboard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'admin/dashboard',
+    redirectTo: 'login',
     pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: Login
   },
   {
     path: 'admin',
     component: AdminLayoutComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
       {
         path: 'dashboard',
         component: Dashboard
@@ -76,6 +89,36 @@ export const routes: Routes = [
         path: 'teacher-groups',
         component: TeacherGroups
       }
+    ]
+  }, 
+  {
+    path: 'parent',
+    component: ParentsLayout,
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: ParentsDashboard
+      },
+    ]
+  },
+  {
+    path: 'teacher',
+    component: ParentsLayout,
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        component: TeachersDashboard
+      },
     ]
   }
 ];
