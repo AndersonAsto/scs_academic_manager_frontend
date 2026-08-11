@@ -13,6 +13,15 @@ export class Sidebar {
   sidebarService = inject(SidebarService);
 
   menu = [
-    { title: 'Panel Principal', icon: 'fa-solid fa-chart-simple', route: '/admin/dashboard' }
+    {
+      title: 'Panel Principal',
+      icon: 'fa-solid fa-chart-simple',
+      route: '/teacher/dashboard'
+    },
+    {
+      title: 'Récord Académico',
+      icon: 'fa-solid fa-arrow-trend-up',
+      route: '/teacher/academic-records'
+    }
   ];
 }

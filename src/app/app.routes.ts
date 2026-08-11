@@ -17,30 +17,21 @@ import { TeacherGroups } from './admin/teacher-groups/teacher-groups';
 import { ParentsLayout } from './parents/layout/parents-layout/parents-layout';
 import { ParentsDashboard } from './parents/dashboard/dashboard';
 import { TeachersDashboard } from './teachers/dashboard/dashboard';
+import { authGuard, loginGuard } from '../core/auth/auth.guard';
+import { TeachersLayout } from './teachers/layout/teachers-layout/teachers-layout';
+import { AcademicRecord } from './teachers/academic-records/academic-records';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },
-  {
-    path: 'login',
-    component: Login
-  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: Login, canActivate: [loginGuard] },
   {
     path: 'admin',
     component: AdminLayoutComponent,
+    canActivate: [authGuard],
+    data: { roles: ['Administrador'] },
     children: [
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
-      {
-        path: 'dashboard',
-        component: Dashboard
-      },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: Dashboard },
       {
         path: 'courses',
         component: Courses
@@ -89,36 +80,27 @@ export const routes: Routes = [
         path: 'teacher-groups',
         component: TeacherGroups
       }
-    ]
-  }, 
+    ],
+  },
   {
     path: 'parent',
     component: ParentsLayout,
+    canActivate: [authGuard],
+    data: { roles: ['Apoderado'] },
     children: [
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
-      {
-        path: 'dashboard',
-        component: ParentsDashboard
-      },
-    ]
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: ParentsDashboard },
+    ],
   },
   {
     path: 'teacher',
-    component: ParentsLayout,
+    component: TeachersLayout,
+    canActivate: [authGuard],
+    data: { roles: ['Docente'] },
     children: [
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
-      {
-        path: 'dashboard',
-        component: TeachersDashboard
-      },
-    ]
-  }
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: TeachersDashboard },
+      { path: 'academic-records', component: AcademicRecord }
+    ],
+  },
 ];

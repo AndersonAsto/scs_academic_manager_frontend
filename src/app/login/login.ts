@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,9 +11,12 @@ import { Router } from '@angular/router';
 })
 export class Login {
   private fb = new FormBuilder();
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   showPassword = signal(false);
+  errorMessage = signal<string | null>(null);
+  isSubmitting = signal(false);
 
   loginForm = this.fb.group({
     username: ['', Validators.required],
@@ -23,11 +27,21 @@ export class Login {
     this.showPassword.update((v) => !v);
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.loginForm.invalid) return;
 
-    // TODO: reemplazar por la llamada real al backend de autenticación.
-    console.log('Login (placeholder):', this.loginForm.value);
-    this.router.navigate(['/admin/dashboard']);
+    this.errorMessage.set(null);
+    this.isSubmitting.set(true);
+
+    const { username, password } = this.loginForm.getRawValue();
+
+    try {
+      const user = await this.authService.login(username!, password!);
+      this.router.navigate([this.authService.homeRouteForRole(user.role)]);
+    } catch {
+      this.errorMessage.set('Usuario o contraseña incorrectos.');
+    } finally {
+      this.isSubmitting.set(false);
+    }
   }
 }
