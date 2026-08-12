@@ -128,6 +128,17 @@
         </div>
 
         <div class="modal-actions">
+            <button
+                class="btn-secondary"
+                type="button"
+                (click)="downloadPdf()"
+                [disabled]="generatingPdf()">
+                @if (generatingPdf()) {
+                    Generando...
+                } @else {
+                    Descargar
+                }
+            </button>
             <button class="btn-secondary" (click)="closeModal.emit()">Cerrar</button>
         </div>
 

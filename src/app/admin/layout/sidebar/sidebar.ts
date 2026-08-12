@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SidebarService } from './sidebar.service';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,6 +12,7 @@ import { SidebarService } from './sidebar.service';
 })
 export class SidebarComponent {
   sidebarService = inject(SidebarService);
+  authService = inject(AuthService);
 
   menu = [
     { title: 'Panel Principal', icon: 'fa-solid fa-chart-simple', route: '/admin/dashboard' },
@@ -25,6 +27,11 @@ export class SidebarComponent {
     { title: 'Personal Académico', icon: 'fa-solid fa-chalkboard-user', route: '/admin/academic-staff' },
     { title: 'Matrículas', icon: 'fa-solid fa-user-graduate', route: '/admin/registrations' },
     { title: 'Grupos', icon: 'fa-solid fa-people-group', route: '/admin/teacher-groups' },
-    { title: 'Horarios', icon: 'fa-solid fa-rectangle-list', route: '/admin/schedules' }
+    { title: 'Horarios', icon: 'fa-solid fa-rectangle-list', route: '/admin/schedules' },
+    { title: 'Rendimiento Académico', icon: 'fa-solid fa-chart-line', route: '/admin/academic-performance' }
   ];
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
+  }
 }

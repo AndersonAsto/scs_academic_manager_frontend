@@ -565,3 +565,22 @@ select,
         min-width: 640px;
     }
 }
+
+/* promedio de cursos por bloques lectivos */
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    box-shadow: none;
+}
+
+.average-cell {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    color: #4a5a46;
+}
+
+.final-average {
+    font-weight: 700;
+    color: #1f2a1c;
+}

@@ -348,7 +348,20 @@
         </div>
 
         <div class="modal-actions">
-            <button class="btn-secondary" (click)="closeModal.emit()">Cerrar</button>
+
+            <button
+                class="btn-secondary"
+                (click)="downloadPdf()">
+                Descargar
+            </button>
+
+            <button
+                class="btn-secondary"
+                (click)="closeModal.emit()">
+
+                Cerrar
+            </button>
+
         </div>
     </div>
 </div>

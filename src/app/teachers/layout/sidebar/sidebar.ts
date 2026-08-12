@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SidebarService } from './sidebar.service';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,6 +12,7 @@ import { SidebarService } from './sidebar.service';
 })
 export class Sidebar {
   sidebarService = inject(SidebarService);
+  authService = inject(AuthService);
 
   menu = [
     {
@@ -19,9 +21,28 @@ export class Sidebar {
       route: '/teacher/dashboard'
     },
     {
-      title: 'Récord Académico',
+      title: 'Registro Académico',
       icon: 'fa-solid fa-arrow-trend-up',
       route: '/teacher/academic-records'
+    },
+    {
+      title: 'Prom. Bloque Lectivo',
+      icon: 'fa-solid fa-arrow-trend-up',
+      route: '/teacher/teaching-block-course-average'
+    },
+    {
+      title: 'Prom. Curso',
+      icon: 'fa-solid fa-arrow-trend-up',
+      route: '/teacher/course-average'
+    },
+    {
+      title: 'Prom. General',
+      icon: 'fa-solid fa-arrow-trend-up',
+      route: '/teacher/general-average'
     }
   ];
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
+  }
 }

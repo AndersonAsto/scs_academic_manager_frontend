@@ -20,6 +20,11 @@ import { TeachersDashboard } from './teachers/dashboard/dashboard';
 import { authGuard, loginGuard } from '../core/auth/auth.guard';
 import { TeachersLayout } from './teachers/layout/teachers-layout/teachers-layout';
 import { AcademicRecord } from './teachers/academic-records/academic-records';
+import { TeachingBlockCourseAverage } from './teachers/teaching-block-course-average/teaching-block-course-average';
+import { GeneralAverage } from './teachers/general-average/general-average';
+import { CourseAverage } from './teachers/course-average/course-average';
+import { StudentAcademicRecord } from './parents/student-academic-record/student-academic-record';
+import { AcademicPerformance } from './admin/academic-performance/academic-performance';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -79,6 +84,10 @@ export const routes: Routes = [
       {
         path: 'teacher-groups',
         component: TeacherGroups
+      },
+      {
+        path: 'academic-performance',
+        component: AcademicPerformance
       }
     ],
   },
@@ -90,6 +99,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: ParentsDashboard },
+      {path: 'student-academic-record', component: StudentAcademicRecord}
     ],
   },
   {
@@ -100,7 +110,10 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: TeachersDashboard },
-      { path: 'academic-records', component: AcademicRecord }
+      { path: 'academic-records', component: AcademicRecord },
+      { path: 'teaching-block-course-average', component: TeachingBlockCourseAverage },
+      { path: 'course-average', component: CourseAverage },
+      { path: 'general-average', component: GeneralAverage }
     ],
   },
 ];

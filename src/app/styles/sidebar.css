@@ -30,10 +30,10 @@
 }
 
 .sidebar-header {
-    height: 70px;
+    min-height: 70px;
     display: flex;
     align-items: center;
-    padding: 0 0 0 26px;
+    padding: 12px 18px 12px 26px;
     border-bottom: 1px solid var(--glass-border);
     flex-shrink: 0;
     overflow: hidden;
@@ -41,44 +41,61 @@
 
 .user-info {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 16px;
+    width: 100%;
+    min-width: 0;
     overflow: hidden;
 }
 
 .school-icon {
     font-size: 18px;
     width: 20px;
+    min-width: 20px;
     flex-shrink: 0;
     text-align: center;
     color: #ffffff;
+    margin-top: 2px;
 }
 
 .user-text {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    flex: 1;
     overflow: hidden;
     white-space: nowrap;
     transition: opacity .15s ease;
 }
 
 .user-name {
+    width: 100%;
     font-size: 14px;
     font-weight: 600;
     line-height: 1.25;
     letter-spacing: .2px;
+    color: #ffffff;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .user-role {
+    margin-top: 2px;
     font-size: 12px;
     font-weight: 400;
-    color: rgba(255, 255, 255, .6);
     line-height: 1.25;
+    color: rgba(255, 255, 255, .65);
 }
 
 .sidebar.collapsed .user-text {
     opacity: 0;
     width: 0;
+    min-width: 0;
+    flex: 0;
+    overflow: hidden;
+    pointer-events: none;
 }
 
 nav {
@@ -188,7 +205,8 @@ nav a i {
     }
 
     .collapse-btn {
-        display: none; /* en mobile se usa el botón flotante externo */
+        display: none;
+        /* en mobile se usa el botón flotante externo */
     }
 
     .sidebar-backdrop {
@@ -235,4 +253,62 @@ nav a i {
     .mobile-open-btn:active {
         transform: scale(.94);
     }
+}
+
+.logout-btn {
+    width: 100%;
+    margin-top: 9px;
+    padding: 7px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    border: 1px solid rgba(16, 185, 129, .35);
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #059669;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease,
+        transform .15s ease;
+}
+
+.logout-btn:hover {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: rgba(16, 185, 129, .6);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
+}
+
+.logout-btn:active {
+    transform: scale(.97);
+}
+
+.logout-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, .9);
+    outline-offset: 2px;
+}
+
+.logout-btn i {
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+.logout-text {
+    white-space: nowrap;
 }

@@ -1,5 +1,6 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Registration } from '../registration.model';
+import { RegistrationPdfService } from '../pdf/registration-pdf.service';
 
 @Component({
   selector: 'app-info-registration',
@@ -9,6 +10,7 @@ import { Registration } from '../registration.model';
   styleUrl: './info-registration.css',
 })
 export class InfoRegistration {
+  private registrationPdfService = inject(RegistrationPdfService);
   isOpen = input<boolean>(false);
   registration = input<Registration | null>(null);
 
@@ -28,5 +30,13 @@ export class InfoRegistration {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  downloadPdf(): void {
+    const registration = this.registration();
+    if (!registration) {
+      return;
+    }
+    this.registrationPdfService.generate(registration);
   }
 }

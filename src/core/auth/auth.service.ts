@@ -10,8 +10,15 @@ export interface SessionUser {
   id: number;
   username: string;
   role: Role;
-  personalInformation: Record<string, any> | null;
+  personalInformation: PersonalInformation | null;
   roleProfile: Record<string, any> | null;
+}
+
+export interface PersonalInformation {
+  id: number;
+  names: string;
+  fathers_surname: string;
+  mothers_surname: string;
 }
 
 const ROLE_HOME: Record<Role, string> = {
@@ -111,4 +118,27 @@ export class AuthService {
     this.accessToken.set(null);
     this.user.set(null);
   }
+
+  displayName = computed(() => {
+    const personalInformation = this.user()?.personalInformation;
+
+    if (!personalInformation) {
+      return '';
+    }
+
+    const names = personalInformation.names.trim().split(/\s+/);
+
+    const firstName = names[0] ?? '';
+    const secondNameInitial = names[1]
+      ? ` ${names[1].charAt(0).toUpperCase()}.`
+      : '';
+
+    return [
+      `${firstName}${secondNameInitial}`,
+      personalInformation.fathers_surname,
+      personalInformation.mothers_surname,
+    ]
+      .filter(Boolean)
+      .join(' ');
+  });
 }

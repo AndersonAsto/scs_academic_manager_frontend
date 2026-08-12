@@ -1,8 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { TeacherGroup } from '../teacher-groups.model';
-import { buildTeacherGroupReport } from '../../shared/pdf/reports/teacher-group.report';
 import { inject } from '@angular/core';
-import { PdfService } from '../../shared/pdf/pdf.service';
 
 @Component({
   selector: 'app-info-teacher-groups',
@@ -11,7 +9,6 @@ import { PdfService } from '../../shared/pdf/pdf.service';
   styleUrl: './info-teacher-groups.css',
 })
 export class InfoTeacherGroups {
-  private readonly pdfService = inject(PdfService);
   isOpen = input<boolean>(false);
   teacherGroup = input<TeacherGroup | null>(null);
 
@@ -31,20 +28,5 @@ export class InfoTeacherGroups {
       hour: '2-digit',
       minute: '2-digit'
     });
-  }
-
-  downloadPdf() {
-
-    if (!this.teacherGroup()) return;
-
-    const report = buildTeacherGroupReport(
-      this.teacherGroup()!
-    );
-
-    this.pdfService.download(
-      report,
-      `teacher-group-${this.teacherGroup()!.id}.pdf`
-    );
-
   }
 }

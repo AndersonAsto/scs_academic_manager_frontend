@@ -85,19 +85,8 @@ export class AcademicRecord {
   }
 
   async onScheduleChange(scheduleId: number) {
-
     this.selectedScheduleId.set(scheduleId);
-
     this.resetFrom('day');
-
-    /**
-    this.lectiveDays.set(
-      await this.service.getLectiveDays(scheduleId)
-    );
-
-    this.showCalendarModal.set(true);
-    */
-
   }
 
   selectDay(day: LectiveDay) {
