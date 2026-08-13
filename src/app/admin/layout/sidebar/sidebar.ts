@@ -28,7 +28,8 @@ export class SidebarComponent {
     { title: 'Matrículas', icon: 'fa-solid fa-user-graduate', route: '/admin/registrations' },
     { title: 'Grupos', icon: 'fa-solid fa-people-group', route: '/admin/teacher-groups' },
     { title: 'Horarios', icon: 'fa-solid fa-rectangle-list', route: '/admin/schedules' },
-    { title: 'Rendimiento Académico', icon: 'fa-solid fa-chart-line', route: '/admin/academic-performance' }
+    { title: 'Rendimiento Académico', icon: 'fa-solid fa-chart-line', route: '/admin/academic-performance' },
+    { title: 'Perfil', icon: 'fa-solid fa-user-gear', route: '/admin/profile' }
   ];
 
   async logout(): Promise<void> {

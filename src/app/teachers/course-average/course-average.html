@@ -44,6 +44,21 @@
     </div>
   </div>
 
+  @if (students().length > 0) {
+  <div class="filters-container">
+    <div class="filter-select">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        type="text"
+        class="table-input"
+        placeholder="Buscar por nombres o apellidos..."
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
+      />
+    </div>
+  </div>
+  }
+
   <!-- Tabla de promedios -->
   @if (isLoadingStudents()) {
   <p class="state-message">Cargando estudiantes...</p>
@@ -62,7 +77,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (student of students(); track student.registration_id) {
+        @for (student of filteredStudents(); track student.registration_id) {
         <tr>
           <td class="student-name">
             {{ student.fathers_surname }} {{ student.mothers_surname }}, {{ student.names }}
@@ -90,7 +105,7 @@
   </div>
 
   <div class="table-footer">
-    <span class="subtitle">{{ students().length }} estudiante(s)</span>
+    <span class="subtitle">{{ filteredStudents().length }} de {{ students().length }} estudiante(s)</span>
   </div>
   } @else if (selectedTeacherGroupId()) {
   <p class="state-message">

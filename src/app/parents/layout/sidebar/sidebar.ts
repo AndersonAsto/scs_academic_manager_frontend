@@ -17,6 +17,8 @@ export class Sidebar {
   menu = [
     { title: 'Panel Principal', icon: 'fa-solid fa-chart-simple', route: '/parent/dashboard' },
     { title: 'Registro Académico', icon: 'fa-solid fa-arrow-trend-up', route: '/parent/student-academic-record' },
+    { title: 'Anuncios', icon: 'fa-solid fa-bullhorn', route: '/parent/ads-received' },
+    { title: 'Perfil', icon: 'fa-solid fa-user-gear', route: '/parent/parent-profile' }
   ];
 
   async logout(): Promise<void> {

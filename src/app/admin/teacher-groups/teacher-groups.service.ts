@@ -14,7 +14,24 @@ export interface TeacherGroupPayload {
     description: string | null;
 }
 
-@Injectable({providedIn: 'root'})
+export interface TutorStudentReport {
+    registration_id: number;
+    student_id: number;
+    names: string;
+    fathers_surname: string;
+    mothers_surname: string;
+    dni?: string | null;
+    email?: string | null;
+    phone_number?: string | null;
+    status: boolean;
+}
+
+export interface TutorGroupReport {
+    teacher_group: TeacherGroup;
+    students: TutorStudentReport[];
+}
+
+@Injectable({ providedIn: 'root' })
 export class TeacherGroupsService {
     private http = inject(HttpClient);
     private baseUrl = `${environment.apiUrl}/teacher-groups`;
@@ -35,5 +52,25 @@ export class TeacherGroupsService {
 
     delete(id: number, del: 0 | 1): Observable<{ message: string }> {
         return this.http.delete<{ message: string }>(`${this.baseUrl}/delete/${id}/${del}`);
+    }
+
+    getTutorGroupReport(
+        yearId: number,
+        gradeId: number,
+        sectionId: number
+    ) {
+        return this.http.get<{
+            length: number;
+            data: TutorGroupReport;
+        }>(
+            `${this.baseUrl}/tutor-report`,
+            {
+                params: {
+                    year_id: yearId,
+                    grade_id: gradeId,
+                    section_id: sectionId
+                }
+            }
+        );
     }
 }

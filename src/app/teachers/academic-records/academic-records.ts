@@ -282,6 +282,8 @@ export class AcademicRecord {
     step: 'teacherGroup' | 'schedule' | 'day'
   ): void {
 
+    this.searchTerm.set(''); // se limpia en cualquier paso
+
     if (step === 'teacherGroup') {
 
       this.selectedTeacherGroupId.set(null);
@@ -311,14 +313,23 @@ export class AcademicRecord {
       return;
     }
 
-    if (step === 'day') {
+    // step === 'day'
+    this.selectedDay.set(null);
+    this.lectiveDays.set([]);
 
-      this.selectedDay.set(null);
-      this.lectiveDays.set([]);
-
-      this.students.set([]);
-
-      return;
-    }
+    this.students.set([]);
   }
+
+  searchTerm = signal('');
+
+  filteredStudents = computed(() => { // NUEVO
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return this.students();
+
+    return this.students().filter((student) =>
+      `${student.names} ${student.fathers_surname} ${student.mothers_surname}`
+        .toLowerCase()
+        .includes(term),
+    );
+  });
 }

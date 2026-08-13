@@ -39,7 +39,9 @@ export class Sidebar {
       title: 'Prom. General',
       icon: 'fa-solid fa-arrow-trend-up',
       route: '/teacher/general-average'
-    }
+    },
+    { title: 'Anuncios', icon: 'fa-solid fa-bullhorn', route: '/teacher/ads-sent' },
+    { title: 'Perfil', icon: 'fa-solid fa-user-gear', route: '/teacher/teacher-profile' }
   ];
 
   async logout(): Promise<void> {

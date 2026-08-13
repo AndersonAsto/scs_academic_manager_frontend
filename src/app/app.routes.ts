@@ -25,6 +25,10 @@ import { GeneralAverage } from './teachers/general-average/general-average';
 import { CourseAverage } from './teachers/course-average/course-average';
 import { StudentAcademicRecord } from './parents/student-academic-record/student-academic-record';
 import { AcademicPerformance } from './admin/academic-performance/academic-performance';
+import { Profile } from './admin/profile/profile';
+import { AdsReceived } from './parents/ads-received/ads-received';
+import { AdsSent } from './teachers/ads-sent/ads-sent';
+import { TeacherProfile } from './teachers/teacher-profile/teacher-profile';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -88,6 +92,10 @@ export const routes: Routes = [
       {
         path: 'academic-performance',
         component: AcademicPerformance
+      },
+      {
+        path: 'profile',
+        component: Profile
       }
     ],
   },
@@ -99,7 +107,9 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: ParentsDashboard },
-      {path: 'student-academic-record', component: StudentAcademicRecord}
+      { path: 'student-academic-record', component: StudentAcademicRecord },
+      { path: 'ads-received', component: AdsReceived },
+      { path: 'parent-profile', component: ParentsDashboard }
     ],
   },
   {
@@ -113,7 +123,9 @@ export const routes: Routes = [
       { path: 'academic-records', component: AcademicRecord },
       { path: 'teaching-block-course-average', component: TeachingBlockCourseAverage },
       { path: 'course-average', component: CourseAverage },
-      { path: 'general-average', component: GeneralAverage }
+      { path: 'general-average', component: GeneralAverage },
+      { path: 'ads-sent', component: AdsSent },
+      { path: 'teacher-profile', component: TeacherProfile },
     ],
   },
 ];

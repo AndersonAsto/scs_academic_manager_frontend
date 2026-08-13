@@ -14,30 +14,16 @@ import { firstValueFrom } from 'rxjs';
 })
 export class InfoAcademicStaff {
 
-  private contractsService =
-    inject(AcademicStaffContractsService);
-
-  private pdfService =
-    inject(AcademicStaffPdfService);
+  private contractsService = inject(AcademicStaffContractsService);
+  private pdfService = inject(AcademicStaffPdfService);
 
   isOpen = input<boolean>(false);
-
-  academicStaff =
-    input<AcademicStaffModel | null>(null);
-
+  academicStaff = input<AcademicStaffModel | null>(null);
   closeModal = output<void>();
-
-  contracts =
-    signal<AcademicStaffContract[]>([]);
-
-  loadingContracts =
-    signal(false);
-
-  errorContracts =
-    signal<string | null>(null);
-
-  generatingPdf =
-    signal(false);
+  contracts = signal<AcademicStaffContract[]>([]);
+  loadingContracts = signal(false);
+  errorContracts = signal<string | null>(null);
+  generatingPdf = signal(false);
 
   onBackdropClick(): void {
     this.closeModal.emit();
@@ -59,27 +45,21 @@ export class InfoAcademicStaff {
       .subscribe({
 
         next: (data) => {
-
           this.contracts.set(data);
           this.loadingContracts.set(false);
-
         },
 
         error: () => {
-
           this.contracts.set([]);
-
           this.errorContracts.set(
             'No se pudieron cargar los contratos del personal académico.'
           );
-
           this.loadingContracts.set(false);
         }
       });
   }
 
   async downloadPdf(): Promise<void> {
-
     const staff = this.academicStaff();
 
     if (!staff) {
@@ -89,28 +69,21 @@ export class InfoAcademicStaff {
     this.generatingPdf.set(true);
 
     try {
-
       const contracts =
         await firstValueFrom(
           this.contractsService.list(staff.id)
         );
-
       await this.pdfService.generate(
         staff,
         contracts
       );
-
     } catch (error) {
-
       console.error(
         'Error generando el reporte PDF:',
         error
       );
-
     } finally {
-
       this.generatingPdf.set(false);
-
     }
   }
 

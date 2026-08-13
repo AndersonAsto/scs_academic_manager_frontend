@@ -124,14 +124,14 @@ export class TeachingBlockCourseAverage {
         rows.map((row) =>
           row.registration_id === student.registration_id
             ? {
-                ...row,
-                daily_average: response.data.daily_average,
-                practice_average: response.data.practice_average,
-                exam_average: response.data.exam_average,
-                attendance_average: response.data.attendance_average,
-                teaching_block_average: response.data.teaching_block_average,
-                hasRecord: true,
-              }
+              ...row,
+              daily_average: response.data.daily_average,
+              practice_average: response.data.practice_average,
+              exam_average: response.data.exam_average,
+              attendance_average: response.data.attendance_average,
+              teaching_block_average: response.data.teaching_block_average,
+              hasRecord: true,
+            }
             : row,
         ),
       );
@@ -153,5 +153,19 @@ export class TeachingBlockCourseAverage {
     this.selectedBlock.set(null);
     this.teachingBlocks.set([]);
     this.students.set([]);
+    this.searchTerm.set('');
   }
+
+  searchTerm = signal('');
+
+  filteredStudents = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return this.students();
+
+    return this.students().filter((student) =>
+      `${student.names} ${student.fathers_surname} ${student.mothers_surname}`
+        .toLowerCase()
+        .includes(term),
+    );
+  });
 }

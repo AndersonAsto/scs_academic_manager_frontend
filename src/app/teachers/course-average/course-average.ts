@@ -44,6 +44,7 @@ export class CourseAverage {
     this.selectedTeacherGroupId.set(null);
     this.teacherGroups.set([]);
     this.students.set([]);
+    this.searchTerm.set('');
 
     this.teacherGroups.set(await this.service.getTeacherGroups(contractId));
   }
@@ -51,6 +52,7 @@ export class CourseAverage {
   onTeacherGroupChange(teacherGroupId: number) {
     this.selectedTeacherGroupId.set(teacherGroupId);
     this.students.set([]);
+    this.searchTerm.set('');
   }
 
   async loadStudents() {
@@ -58,6 +60,8 @@ export class CourseAverage {
     const group = this.selectedTeacherGroup();
 
     if (!contract || !group) return;
+
+    this.searchTerm.set('');
 
     this.isLoadingStudents.set(true);
 
@@ -142,4 +146,17 @@ export class CourseAverage {
       });
     }
   }
+
+  searchTerm = signal('');
+
+  filteredStudents = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return this.students();
+
+    return this.students().filter((student) =>
+      `${student.names} ${student.fathers_surname} ${student.mothers_surname}`
+        .toLowerCase()
+        .includes(term),
+    );
+  });
 }

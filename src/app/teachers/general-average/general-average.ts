@@ -57,6 +57,7 @@ export class GeneralAverage {
     this.students.set([]);
     this.sectionCourses.set([]);
     this.teacherGroups.set([]);
+    this.searchTerm.set('');
 
     this.teacherGroups.set(await this.service.getTeacherGroups(contractId));
 
@@ -70,6 +71,8 @@ export class GeneralAverage {
     const contract = this.selectedContract();
     const tutor = this.tutorGroup();
     if (!contract || !tutor) return;
+
+    this.searchTerm.set('');
 
     this.isLoadingStudents.set(true);
 
@@ -179,7 +182,7 @@ export class GeneralAverage {
       });
     }
   }
-  
+
   isWideDetail = computed(
     () => this.detailType() === 'records' || this.detailType() === 'blocks',
   );
@@ -187,4 +190,17 @@ export class GeneralAverage {
   attendanceClass(attendance: AcademicRecordDetail['attendance']): string {
     return attendance ? `attendance-${attendance}` : 'attendance-none';
   }
+
+  searchTerm = signal('');
+
+  filteredStudents = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return this.students();
+
+    return this.students().filter((student) =>
+      `${student.names} ${student.fathers_surname} ${student.mothers_surname}`
+        .toLowerCase()
+        .includes(term),
+    );
+  });
 }

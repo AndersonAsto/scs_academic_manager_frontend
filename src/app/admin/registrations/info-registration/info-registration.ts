@@ -1,6 +1,6 @@
 import { Component, inject, input, output } from '@angular/core';
 import { Registration } from '../registration.model';
-import { RegistrationPdfService } from '../pdf/registration-pdf.service';
+import { RegistrationPdfService } from './registration-pdf.service';
 
 @Component({
   selector: 'app-info-registration',
