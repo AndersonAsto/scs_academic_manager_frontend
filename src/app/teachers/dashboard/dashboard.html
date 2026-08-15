@@ -1,1 +1,147 @@
-<p>dashboard works!</p>
+<div class="generics-page">
+  <div class="page-header">
+    <div>
+      <h1>Panel Principal</h1>
+      <p class="subtitle">Resumen de tus grupos en el año lectivo seleccionado.</p>
+    </div>
+  </div>
+
+  <div class="filters-container">
+    <div class="filters-header">
+      <i class="fa-solid fa-filter"></i>
+      Año lectivo
+    </div>
+
+    <div class="filters-content">
+      <div class="filter-select">
+        <i class="fa-solid fa-calendar-days"></i>
+        <select (change)="onContractChange(+$any($event.target).value)">
+          <option value="" disabled selected>Año (contrato)</option>
+          @for (contract of contracts(); track contract.id) {
+            <option [value]="contract.id">{{ contract.year }} — {{ contract.position }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <p class="state-message">Cargando estadísticas...</p>
+  } @else if (summary(); as data) {
+
+    <!-- Mis cursos -->
+    <div class="filters-container">
+      <div class="filters-header">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        Mis Cursos
+      </div>
+
+      @if (data.courses.length === 0) {
+        <p class="state-message">No tienes grupos asignados este año.</p>
+      } @else {
+        <div class="course-chip-list">
+          @for (course of data.courses; track course.teacher_group_id) {
+            <button
+              type="button"
+              class="course-chip"
+              [class.selected]="selectedCourseGroupId() === course.teacher_group_id"
+              (click)="toggleCourse(course.teacher_group_id)"
+            >
+              {{ course.course }} — {{ course.grade }} {{ course.section }}
+              @if (course.tutor) {
+                <i class="fa-solid fa-star" title="Eres tutor de este grupo"></i>
+              }
+            </button>
+          }
+        </div>
+
+        @if (selectedCourseDetail(); as course) {
+          <div class="course-detail-panel">
+            <div class="chart-card">
+              <span class="chart-card-title">{{ course.course }} — Promedio por Bloque Lectivo</span>
+              <app-bar-chart [labels]="blockLabels(course)" [data]="blockValues(course)" [maxValue]="20" />
+            </div>
+
+            <div class="course-detail-metrics">
+              <span class="group-summary-metric">
+                <i class="fa-solid fa-chart-line"></i>
+                Promedio del curso: <strong>{{ computedCourseAverage(course) ?? '-' }}</strong>
+              </span>
+              <span class="group-summary-metric">
+                <i class="fa-solid fa-calendar-check"></i>
+                Asistencia del curso:
+                <strong>{{ course.attendance_average !== null ? (course.attendance_average * 100).toFixed(0) + '%' : '-' }}</strong>
+              </span>
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Panel de tutor: sección completa, todos los cursos -->
+    @if (data.tutor_section_summary; as tutorSummary) {
+      <div class="filters-container">
+        <div class="filters-header">
+          <i class="fa-solid fa-user-graduate"></i>
+          Grupo a tu cargo — {{ tutorSummary.grade }} {{ tutorSummary.section }}
+        </div>
+
+        <div class="group-detail-charts">
+          <div class="chart-card">
+            <span class="chart-card-title">Promedio General Anual</span>
+            <app-bar-chart
+              [labels]="['Promedio General']"
+              [data]="[tutorSummary.general_average ?? 0]"
+              [maxValue]="20"
+              color="#00897B"
+            />
+          </div>
+
+          <div class="chart-card">
+            <span class="chart-card-title">Asistencia del Grupo</span>
+            <app-bar-chart
+              [labels]="['Asistencia']"
+              [data]="[(tutorSummary.attendance_average ?? 0) * 100]"
+              [maxValue]="100"
+              color="#2962a8"
+            />
+          </div>
+        </div>
+
+        <div class="course-chip-list">
+          @for (course of tutorSummary.courses; track course.course) {
+            <button
+              type="button"
+              class="course-chip"
+              [class.selected]="selectedTutorCourseName() === course.course"
+              (click)="toggleTutorCourse(course.course)"
+            >
+              {{ course.course }}
+            </button>
+          }
+        </div>
+
+        @if (selectedTutorCourseDetail(); as course) {
+          <div class="course-detail-panel">
+            <div class="chart-card">
+              <span class="chart-card-title">{{ course.course }} — Promedio por Bloque Lectivo</span>
+              <app-bar-chart [labels]="blockLabels(course)" [data]="blockValues(course)" [maxValue]="20" />
+            </div>
+
+            <div class="course-detail-metrics">
+              <span class="group-summary-metric">
+                <i class="fa-solid fa-chart-line"></i>
+                Promedio del curso: <strong>{{ computedCourseAverage(course) ?? '-' }}</strong>
+              </span>
+              <span class="group-summary-metric">
+                <i class="fa-solid fa-calendar-check"></i>
+                Asistencia del curso:
+                <strong>{{ course.attendance_average !== null ? (course.attendance_average * 100).toFixed(0) + '%' : '-' }}</strong>
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

@@ -11,44 +11,6 @@ pdfMake.addVirtualFileSystem(pdfFonts);
 })
 export class RegistrationPdfService {
 
-    private async loadLogo(): Promise<string> {
-        const response = await fetch('/logo-ie-22234.png');
-
-        if (!response.ok) {
-            throw new Error('No se pudo cargar el logo institucional.');
-        }
-        const blob = await response.blob();
-        return await this.blobToDataUrl(blob);
-    }
-
-    private blobToDataUrl(
-        blob: Blob
-    ): Promise<string> {
-
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (typeof reader.result === 'string') {
-                    resolve(reader.result);
-                } else {
-                    reject(
-                        new Error(
-                            'No se pudo convertir el logo.'
-                        )
-                    );
-                }
-            };
-            reader.onerror = () => {
-                reject(
-                    new Error(
-                        'Error leyendo el logo.'
-                    )
-                );
-            };
-            reader.readAsDataURL(blob);
-        });
-    }
-
     private readonly primaryColor = '#008F6B';
     private readonly darkGreen = '#006B50';
     private readonly lightGreen = '#E8F5F0';
@@ -71,108 +33,81 @@ export class RegistrationPdfService {
 
             pageSize: 'A4',
 
-            pageMargins: [40, 95, 40, 50],
+            pageMargins: [40, 90, 40, 50],
 
-            header: {
+            header: () => ({
 
                 margin: [40, 25, 40, 0],
 
-                stack: [
+                columns: [
 
                     {
-                        canvas: [
-                            {
-                                type: 'rect',
-                                x: 0,
-                                y: 0,
-                                w: 515,
-                                h: 6,
-                                color: this.primaryColor
-                            }
-                        ]
+                        width: 55,
+                        image: logo,
+                        fit: [55, 55]
                     },
 
                     {
-                        columns: [
-
-                            logo
-                                ? {
-                                    image: logo,
-                                    width: 55,
-                                    height: 55,
-                                    margin: [0, 10, 15, 0]
-                                }
-                                : {
-                                    width: 55,
-                                    text: ''
-                                },
+                        width: '*',
+                        stack: [
 
                             {
-                                stack: [
-
-                                    {
-                                        text: 'INSTITUCIÓN EDUCATIVA',
-                                        style: 'institutionName'
-                                    },
-
-                                    {
-                                        text: 'N° 22234 "SANTIAGO CALLE SANTOS"',
-                                        style: 'institutionNumber'
-                                    },
-
-                                    {
-                                        text: 'REPORTE DE MATRÍCULA',
-                                        style: 'headerReportTitle'
-                                    }
-
-                                ],
-
-                                margin: [0, 12, 0, 0]
+                                text: 'INSTITUCIÓN EDUCATIVA',
+                                style: 'institutionName'
                             },
 
                             {
-                                width: 70,
+                                text: 'N° 22234 "SANTIAGO CALLE SANTOS"',
+                                style: 'institutionNumber'
+                            },
 
-                                stack: [
-
-                                    {
-                                        text: `N.º ${registration.id}`,
-                                        style: 'headerRegistrationNumber'
-                                    },
-
-                                    {
-                                        text: `Año ${registration.year.year}`,
-                                        style: 'headerYear'
-                                    }
-
-                                ],
-
-                                margin: [0, 18, 0, 0]
+                            {
+                                text: 'REPORTE DE MATRÍCULA',
+                                style: 'headerReportTitle'
                             }
 
-                        ]
+                        ],
+
+                        margin: [10, 4, 0, 0]
                     },
 
                     {
-                        canvas: [
-                            {
-                                type: 'line',
-                                x1: 0,
-                                y1: 0,
-                                x2: 515,
-                                y2: 0,
-                                lineWidth: 1,
-                                lineColor: this.primaryColor
-                            }
-                        ],
+                        width: 70,
 
-                        margin: [0, 10, 0, 0]
+                        stack: [
+
+                            {
+                                text: `N.º ${registration.id}`,
+                                style: 'headerRegistrationNumber'
+                            },
+
+                            {
+                                text: `Año ${registration.year.year}`,
+                                style: 'headerYear'
+                            }
+
+                        ]
                     }
 
                 ]
-            },
+            }),
 
             content: [
+
+                {
+                    canvas: [
+                        {
+                            type: 'rect',
+                            x: 0,
+                            y: 0,
+                            w: 515,
+                            h: 6,
+                            color: this.primaryColor
+                        }
+                    ],
+
+                    margin: [0, 0, 0, 18]
+                },
 
                 {
                     text: 'INFORMACIÓN ACADÉMICA Y ADMINISTRATIVA',
@@ -602,40 +537,6 @@ export class RegistrationPdfService {
         };
     }
 
-    private loadImage(path: string): Promise<string | null> {
-
-        return new Promise((resolve) => {
-
-            const image = new Image();
-
-            image.onload = () => {
-
-                const canvas = document.createElement('canvas');
-
-                canvas.width = image.width;
-                canvas.height = image.height;
-
-                const context = canvas.getContext('2d');
-
-                if (!context) {
-                    resolve(null);
-                    return;
-                }
-
-                context.drawImage(image, 0, 0);
-
-                resolve(canvas.toDataURL('image/png'));
-            };
-
-            image.onerror = () => {
-                console.warn(`No se pudo cargar el logo: ${path}`);
-                resolve(null);
-            };
-
-            image.src = path;
-        });
-    }
-
     private formatDate(value: string | undefined | null): string {
 
         if (!value) {
@@ -689,5 +590,57 @@ export class RegistrationPdfService {
             .replace(/\s+/g, '_');
 
         return `Matricula_${registration.id}_${fullName}.pdf`;
+    }
+
+    private async loadLogo(): Promise<string> {
+
+        /*
+         * Coloca el logo en:
+         *
+         * public/logo-ie-22234.png
+         *
+         * Si utilizas otro nombre, cambia solamente esta ruta.
+         */
+
+        const response = await fetch('/logo-ie-22234.png', { cache: 'no-store' });
+
+        if (!response.ok) {
+            throw new Error('No se pudo cargar el logo institucional.');
+        }
+        const blob = await response.blob();
+        return await this.blobToDataUrl(blob);
+    }
+
+    private blobToDataUrl(
+        blob: Blob
+    ): Promise<string> {
+
+        return new Promise((resolve, reject) => {
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+
+                if (typeof reader.result === 'string') {
+                    resolve(reader.result);
+                } else {
+                    reject(
+                        new Error(
+                            'No se pudo convertir el logo.'
+                        )
+                    );
+                }
+            };
+
+            reader.onerror = () => {
+                reject(
+                    new Error(
+                        'Error leyendo el logo.'
+                    )
+                );
+            };
+
+            reader.readAsDataURL(blob);
+        });
     }
 }
