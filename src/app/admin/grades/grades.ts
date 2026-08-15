@@ -4,11 +4,12 @@ import { Grade } from './grades.model';
 import { GradeService } from './grades.service';
 import { InfoGrade } from './info-grade/info-grade';
 import { CreateUpdateGrades } from './create-update-grades/create-update-grades';
+import { DeleteGrade } from './delete-grade/delete-grade';
 
 @Component({
   selector: 'app-grades',
   standalone: true,
-  imports: [FormsModule, InfoGrade, CreateUpdateGrades],
+  imports: [FormsModule, InfoGrade, CreateUpdateGrades, DeleteGrade],
   templateUrl: './grades.html',
   styleUrl: './grades.css',
 })
@@ -85,7 +86,22 @@ export class Grades {
     this.gradeToView.set(null);
   }
 
-  onDelete(grade: Grade): void {
+  isDeleteModalOpen = signal(false);
+  gradeToDelete = signal<Grade | null>(null);
 
+  onDelete(grade: Grade): void {
+    this.gradeToDelete.set(grade);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.gradeToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.gradeToDelete.set(null);
+    this.fetchGrades();
   }
 }

@@ -12,6 +12,61 @@ export interface SchedulePayload {
     description: string | null;
 }
 
+export interface ScheduleReportItem {
+    id: number;
+
+    day: string;
+
+    description: string | null;
+
+    time_slot: {
+        id: number;
+        time_slot: string | null;
+        start_time: string | null;
+        end_time: string | null;
+    };
+
+    course: {
+        id: number;
+        course: string | null;
+    };
+
+    teacher_group: {
+        id: number;
+        tutor: boolean;
+
+        grade: {
+            id: number;
+            grade: string | null;
+        };
+
+        section: {
+            id: number;
+            section: string | null;
+        };
+
+        academic_staff_contract: {
+            year: {
+                id: number;
+                year: number | string | null;
+            };
+
+            academic_staff: {
+                personal_information: {
+                    names: string | null;
+                    fathers_surname: string | null;
+                    mothers_surname: string | null;
+                };
+            };
+        };
+    };
+}
+
+export interface ScheduleReportResponse {
+    length: number;
+    data: ScheduleReportItem[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class SchedulesService {
     private http = inject(HttpClient);
@@ -33,5 +88,23 @@ export class SchedulesService {
 
     delete(id: number, del: 0 | 1): Observable<{ message: string }> {
         return this.http.delete<{ message: string }>(`${this.baseUrl}/delete/${id}/${del}`);
+    }
+
+    getScheduleReport(
+        yearId: number,
+        gradeId: number,
+        sectionId: number
+    ): Observable<ScheduleReportResponse> {
+
+        return this.http.get<ScheduleReportResponse>(
+            `${this.baseUrl}/report`,
+            {
+                params: {
+                    year_id: yearId,
+                    grade_id: gradeId,
+                    section_id: sectionId
+                }
+            }
+        );
     }
 }

@@ -82,4 +82,11 @@ export class AcademicStaffService {
     delete(id: number, del: 0 | 1): Observable<{ message: string }> {
         return this.http.delete<{ message: string }>(`${this.baseUrl}/delete/${id}/${del}`);
     }
+
+    restore(id: number): Observable<{ message: string }> {
+        return this.http.patch<{ message: string }>(
+            `${this.baseUrl}/restore/${id}`,
+            {}
+        );
+    }
 }

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { AcademicStaffContractsService, UpdateAcademicContractPayload } from './academic-staff-contracts.service';
 import { AcademicStaffContract } from './academic-staff-contracts.model';
 import { AcademicStaffModel } from '../academic-staff.model';
+import { DeleteAcademicStaffContracts } from '../delete-academic-staff-contracts/delete-academic-staff-contracts';
 
 @Component({
   selector: 'app-academic-staff-contracts',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DeleteAcademicStaffContracts],
   templateUrl: './academic-staff-contracts.html',
   styleUrl: './academic-staff-contracts.css',
 })
@@ -86,5 +87,30 @@ export class AcademicStaffContracts {
   onClose(): void {
     this.editingContractId.set(null);
     this.closeModal.emit();
+  }
+
+  isDeleteModalOpen = signal(false);
+  contractToDelete = signal<AcademicStaffContract | null>(null);
+
+  onDelete(contract: AcademicStaffContract): void {
+    this.contractToDelete.set(contract);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.contractToDelete.set(null);
+  }
+
+  onContractDeleted(): void {
+
+    this.isDeleteModalOpen.set(false);
+    this.contractToDelete.set(null);
+
+    const staff = this.academicStaff();
+
+    if (staff) {
+      this.loadContracts(staff.id);
+    }
   }
 }

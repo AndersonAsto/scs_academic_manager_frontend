@@ -97,9 +97,24 @@
                 <button class="icon-btn edit" (click)="onEdit(academicStaff)" aria-label="Actualizar">
                     <i class="fa-solid fa-pen"></i>
                 </button>
+                
+                @if (academicStaff.status) {
+
                 <button class="icon-btn delete" (click)="onDelete(academicStaff)" aria-label="Eliminar">
+
                     <i class="fa-solid fa-trash"></i>
+
                 </button>
+
+                } @else {
+
+                <button class="icon-btn restore" (click)="onRestore(academicStaff)" aria-label="Reactivar">
+
+                    <i class="fa-solid fa-power-off"></i>
+
+                </button>
+
+                }
             </div>
 
         </div>
@@ -109,27 +124,17 @@
 
 </div>
 
-<app-create-update-academic-staff
-    [isOpen]="isFormModalOpen()"
-    [academicStaff]="academicStaffToEdit()"
-    (closeModal)="onCloseFormModal()"
-    (saved)="onSaved()"
-/>
+<app-create-update-academic-staff [isOpen]="isFormModalOpen()" [academicStaff]="academicStaffToEdit()"
+    (closeModal)="onCloseFormModal()" (saved)="onSaved()" />
 
-<app-info-academic-staff
-    [isOpen]="isInfoModalOpen()"
-    [academicStaff]="academicStaffToView()"
-    (closeModal)="onCloseInfoModal()"
-/>
+<app-info-academic-staff [isOpen]="isInfoModalOpen()" [academicStaff]="academicStaffToView()"
+    (closeModal)="onCloseInfoModal()" />
 
-<app-academic-staff-contracts
-  [isOpen]="isContractsModalOpen()"
-  [academicStaff]="academicStaffContractsToView()"
-  (closeModal)="onCloseContractsModal()"
-/>
+<app-academic-staff-contracts [isOpen]="isContractsModalOpen()" [academicStaff]="academicStaffContractsToView()"
+    (closeModal)="onCloseContractsModal()" />
 
-<app-academic-staff-users
-    [isOpen]="isUsersModalOpen()"
-    [academicStaff]="academicStaffUserToView()"
-    (closeModal)="onCloseUsersModal()"
-/>
+<app-academic-staff-users [isOpen]="isUsersModalOpen()" [academicStaff]="academicStaffUserToView()"
+    (closeModal)="onCloseUsersModal()" />
+
+<app-delete-academic-staff [isOpen]="isDeleteModalOpen()" [academicStaff]="academicStaffToDelete()"
+    (closeModal)="onCloseDeleteModal()" (deleted)="onDeleted()" />

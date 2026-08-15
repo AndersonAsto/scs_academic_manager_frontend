@@ -6,11 +6,12 @@ import { InfoAcademicStaff } from './info-academic-staff/info-academic-staff';
 import { CreateUpdateAcademicStaff } from './create-update-academic-staff/create-update-academic-staff';
 import { AcademicStaffContracts } from './academic-staff-contracts/academic-staff-contracts';
 import { AcademicStaffUsers } from './academic-staff-users/academic-staff-users';
+import { DeleteAcademicStaff } from './delete-academic-staff/delete-academic-staff';
 
 @Component({
   selector: 'app-academic-staff',
   standalone: true,
-  imports: [FormsModule, InfoAcademicStaff, CreateUpdateAcademicStaff, AcademicStaffContracts, AcademicStaffUsers],
+  imports: [FormsModule, InfoAcademicStaff, CreateUpdateAcademicStaff, AcademicStaffContracts, AcademicStaffUsers, DeleteAcademicStaff],
   templateUrl: './academic-staff.html',
   styleUrl: './academic-staff.css',
 })
@@ -107,8 +108,6 @@ export class AcademicStaff {
     this.academicStaffToView.set(null);
   }
 
-  onDelete(academicStaff: AcademicStaffModel): void { }
-
   selectedStaffType = signal<string | null>(null);
 
   staffTypes = computed(() => {
@@ -152,5 +151,42 @@ export class AcademicStaff {
   onCloseUsersModal(): void {
     this.isUsersModalOpen.set(false);
     this.academicStaffUserToView.set(null);
+  }
+
+  isDeleteModalOpen = signal(false);
+  academicStaffToDelete = signal<AcademicStaffModel | null>(null);
+
+  onDelete(academicStaff: AcademicStaffModel): void {
+    this.academicStaffToDelete.set(academicStaff);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.academicStaffToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.academicStaffToDelete.set(null);
+    this.fetchAcademicStaff();
+  }
+
+  onRestore(academicStaff: AcademicStaffModel): void {
+
+    this.academicStaffService.restore(academicStaff.id).subscribe({
+
+      next: () => {
+        this.fetchAcademicStaff();
+      },
+
+      error: (error) => {
+        this.error.set(
+          error.error?.message ||
+          'No se pudo reactivar el personal académico.'
+        );
+      }
+
+    });
   }
 }

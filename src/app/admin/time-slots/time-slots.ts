@@ -4,10 +4,11 @@ import { TimeSlot } from './time-slots.model';
 import { TimeSlotService } from './time-slots.service';
 import { InfoTimeSlots } from './info-time-slots/info-time-slots';
 import { CreateUpdateTimeSlots } from './create-update-time-slots/create-update-time-slots';
+import { DeleteTimeSlots } from './delete-time-slots/delete-time-slots';
 
 @Component({
   selector: 'app-time-slots',
-  imports: [FormsModule, InfoTimeSlots, CreateUpdateTimeSlots],
+  imports: [FormsModule, InfoTimeSlots, CreateUpdateTimeSlots, DeleteTimeSlots],
   standalone: true,
   templateUrl: './time-slots.html',
   styleUrl: './time-slots.css',
@@ -64,7 +65,7 @@ export class TimeSlots {
   }
 
   onEdit(timeSlot: TimeSlot): void {
-    this.timeSlotToEdit.set(timeSlot),
+    this.timeSlotToEdit.set(timeSlot);
     this.isFormModalOpen.set(true);
   }
 
@@ -89,7 +90,22 @@ export class TimeSlots {
     this.timeSlotToView.set(null);
   }
 
-  onDelete(timeSlot: TimeSlot): void {
+  isDeleteModalOpen = signal(false);
+  timeSlotToDelete = signal<TimeSlot | null>(null);
 
+  onDelete(timeSlot: TimeSlot): void {
+    this.timeSlotToDelete.set(timeSlot);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.timeSlotToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.timeSlotToDelete.set(null);
+    this.fetchTimeSlots();
   }
 }

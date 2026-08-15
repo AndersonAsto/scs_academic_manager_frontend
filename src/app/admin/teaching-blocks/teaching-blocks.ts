@@ -5,10 +5,11 @@ import { CreateTeachingBlocks } from './create-teaching-blocks/create-teaching-b
 import { TeachingBlock } from './teaching-blocks.model';
 import { TeachingBlockService } from './teaching-blocks.service';
 import { UpdateTeachingBlock } from '../teaching-blocks/update-teaching-block/update-teaching-block';
+import { DeleteTeachingBlocks } from './delete-teaching-blocks/delete-teaching-blocks';
 
 @Component({
   selector: 'app-teaching-blocks',
-  imports: [FormsModule, InfoTeachingBlocks, CreateTeachingBlocks, UpdateTeachingBlock],
+  imports: [FormsModule, InfoTeachingBlocks, CreateTeachingBlocks, UpdateTeachingBlock, DeleteTeachingBlocks],
   templateUrl: './teaching-blocks.html',
   styleUrl: './teaching-blocks.css',
   standalone: true
@@ -110,10 +111,6 @@ export class TeachingBlocks {
     this.isCreateModalOpen.set(false);
   }
 
-  onDelete(teachingBlock: TeachingBlock): void {
-
-  }
-
   years = computed(() => {
     const years = this.teachingBlock()
       .map(tb => tb.year);
@@ -129,4 +126,40 @@ export class TeachingBlocks {
     this.searchTerm.set('');
     this.selectedYear.set(null);
   }
+
+  isDeleteModalOpen = signal(false);
+  yearToDelete = signal<number | null>(null);
+
+  onDelete(): void {
+
+    const yearId = this.selectedYear();
+
+    if (yearId === null) {
+      return;
+    }
+
+    this.yearToDelete.set(yearId);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.yearToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.yearToDelete.set(null);
+
+    this.selectedYear.set(null);
+
+    this.fetchTeachingBlocks();
+  }
+
+  selectedYearObject = computed(() => {
+    const id = this.selectedYear();
+    if (id === null) return null;
+
+    return this.years().find(y => y.id === id) ?? null;
+  });
 }

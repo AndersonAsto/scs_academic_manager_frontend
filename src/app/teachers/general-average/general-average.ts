@@ -8,6 +8,8 @@ import {
   AcademicRecordDetail,
   BlockAverageDetail,
 } from './general-average.service';
+import { AnnualReportService } from '../../admin/academic-performance/annual-report.service';
+import { AnnualReportPdfService } from '../../admin/academic-performance/annual-report-pdf.service';
 
 type DetailType = 'records' | 'blocks' | 'course' | null;
 
@@ -203,4 +205,64 @@ export class GeneralAverage {
         .includes(term),
     );
   });
+
+  private annualReport = inject(AnnualReportService);
+  private annualReportPdf = inject(AnnualReportPdfService);
+
+  downloadingIds = signal<Set<number>>(new Set());
+  downloadingAnnualReportIds = signal<Set<number>>(new Set());
+
+  isDownloading(registrationId: number): boolean {
+    return this.downloadingIds().has(registrationId);
+  }
+
+  isDownloadingAnnualReport(registrationId: number): boolean {
+    return this.downloadingAnnualReportIds().has(registrationId);
+  }
+
+  async downloadDetailedReport(student: StudentRow) {
+    const contract = this.selectedContract();
+    if (!contract) return;
+
+    this.downloadingIds.update((set) => new Set(set).add(student.registration_id));
+
+    try {
+      await this.service.downloadDetailedReport(student.registration_id, contract.year_id);
+    } finally {
+      this.downloadingIds.update((set) => {
+        const next = new Set(set);
+        next.delete(student.registration_id);
+        return next;
+      });
+    }
+  }
+
+  async downloadAnnualReport(student: StudentRow) {
+    const contract = this.selectedContract();
+    const tutor = this.tutorGroup();
+    if (!contract || !tutor) return;
+
+    this.downloadingAnnualReportIds.update((set) => new Set(set).add(student.registration_id));
+
+    try {
+      const data = await this.annualReport.getAnnualReportData(
+        student.registration_id,
+        contract.year_id,
+        tutor.grade_id,
+        tutor.section_id,
+        { names: student.names, fathers_surname: student.fathers_surname, mothers_surname: student.mothers_surname },
+        tutor.grade,
+        tutor.section,
+        contract.year,
+      );
+
+      await this.annualReportPdf.generate(data);
+    } finally {
+      this.downloadingAnnualReportIds.update((set) => {
+        const next = new Set(set);
+        next.delete(student.registration_id);
+        return next;
+      });
+    }
+  }
 }

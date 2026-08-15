@@ -49,7 +49,12 @@ export class TeachingBlockService {
         return this.http.put<TeachingBlock>(`${this.baseUrl}/update/${id}`, payload);
     }
 
-    delete(id: number, del: 0 | 1): Observable<{ message: string }> {
-        return this.http.delete<{ message: string }>(`${this.baseUrl}/delete/${id}/${del}`);
+    deleteByYear(
+        yearId: number,
+        del: 0 | 1
+    ): Observable<{ message: string }> {
+        return this.http.delete<{ message: string }>(
+            `${this.baseUrl}/delete/${yearId}/${del}`
+        );
     }
 }

@@ -79,6 +79,14 @@
                     <button class="icon-btn edit" (click)="startEdit(contract)" title="Editar contrato">
                       <i class="fa-solid fa-pen-to-square"></i>
                     </button>
+                    <button
+                        class="icon-btn delete"
+                        (click)="onDelete(contract)"
+                        title="Eliminar contrato">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
                   </div>
                 }
               </div>
@@ -89,3 +97,10 @@
     </div>
   </div>
 }
+
+<app-delete-academic-staff-contracts
+    [isOpen]="isDeleteModalOpen()"
+    [contract]="contractToDelete()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onContractDeleted()"
+/>

@@ -5,10 +5,11 @@ import { Weighting } from './weightings.model';
 import { WeightingsService } from './weightings.service';
 import { CreateWeightings } from './create-weightings/create-weightings';
 import { UpdateWeighting } from './update-weighting/update-weighting';
+import { DeleteWeightings } from './delete-weightings/delete-weightings';
 
 @Component({
   selector: 'app-weightings',
-  imports: [FormsModule, InfoWeightings, CreateWeightings, UpdateWeighting],
+  imports: [FormsModule, InfoWeightings, CreateWeightings, UpdateWeighting, DeleteWeightings],
   standalone: true,
   templateUrl: './weightings.html',
   styleUrl: './weightings.css',
@@ -102,10 +103,6 @@ export class Weightings {
     this.weightingToView.set(null);
   }
 
-  onDelete(weighting: Weighting): void {
-
-  }
-
   years = computed(() => {
     const years = this.weighting()
       .map(w => w.year);
@@ -120,5 +117,46 @@ export class Weightings {
   clearFilters(): void {
     this.searchTerm.set('');
     this.selectedYear.set(null);
+  }
+
+  isDeleteModalOpen = signal(false);
+  yearToDelete = signal<number | null>(null);
+
+  onDelete(): void {
+
+    const yearId = this.selectedYear();
+
+    if (yearId === null) {
+      return;
+    }
+
+    this.yearToDelete.set(yearId);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  selectedYearObject = computed(() => {
+
+    const id = this.selectedYear();
+
+    if (id === null) {
+      return null;
+    }
+
+    return this.years().find(y => y.id === id) ?? null;
+  });
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.yearToDelete.set(null);
+  }
+
+  onDeleted(): void {
+
+    this.isDeleteModalOpen.set(false);
+    this.yearToDelete.set(null);
+
+    this.selectedYear.set(null);
+
+    this.fetchWeighting();
   }
 }

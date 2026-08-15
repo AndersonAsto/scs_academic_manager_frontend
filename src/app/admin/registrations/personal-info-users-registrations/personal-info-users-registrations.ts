@@ -72,6 +72,9 @@ export class PersonalInfoUsersRegistrations implements OnChanges {
     if (!this.data) return;
 
     const info = this.data.personalInfo;
+
+    this.isActive.set(info.status);
+
     this.form.patchValue({
       names: info.names || '',
       fathers_surname: info.fathers_surname || '',
@@ -212,4 +215,70 @@ export class PersonalInfoUsersRegistrations implements OnChanges {
     this.errorMessage.set(null);
     this.closeModal.emit();
   }
+
+  submittingStatus = signal(false);
+  statusMessage = signal<string | null>(null);
+  statusError = signal<string | null>(null);
+
+  onDeactivate(): void {
+    if (!this.data) {
+      return;
+    }
+
+    this.submittingStatus.set(true);
+
+    const request =
+      this.data.type === 'student'
+        ? this.studentsService.delete(this.data.entityId, 0)
+        : this.parentsService.delete(this.data.entityId, 0);
+
+    request.subscribe({
+      next: () => {
+        this.isActive.set(false);
+        this.submittingStatus.set(false);
+        this.saved.emit();
+      },
+
+      error: (err) => {
+        this.submittingStatus.set(false);
+
+        this.errorMessage.set(
+          err.error?.message ??
+          'No se pudo desactivar el registro.'
+        );
+      }
+    });
+  }
+
+  onRestore(): void {
+    if (!this.data) {
+      return;
+    }
+
+    this.submittingStatus.set(true);
+
+    const request =
+      this.data.type === 'student'
+        ? this.studentsService.restore(this.data.entityId)
+        : this.parentsService.restore(this.data.entityId);
+
+    request.subscribe({
+      next: () => {
+        this.isActive.set(true);
+        this.submittingStatus.set(false);
+        this.saved.emit();
+      },
+
+      error: (err) => {
+        this.submittingStatus.set(false);
+
+        this.errorMessage.set(
+          err.error?.message ??
+          'No se pudo restaurar el registro.'
+        );
+      }
+    });
+  }
+
+  isActive = signal(false);
 }

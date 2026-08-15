@@ -9,10 +9,11 @@ import {
   PersonalInfoModalData,
   EntityType
 } from './personal-info-users-registrations/personal-info-users-registrations';
+import { DeleteRegistrations } from './delete-registrations/delete-registrations';
 
 @Component({
   selector: 'app-registrations',
-  imports: [FormsModule, InfoRegistration, CreateUpdateRegistration, PersonalInfoUsersRegistrations],
+  imports: [FormsModule, InfoRegistration, CreateUpdateRegistration, PersonalInfoUsersRegistrations, DeleteRegistrations],
   standalone: true,
   templateUrl: './registrations.html',
   styleUrl: './registrations.css',
@@ -167,8 +168,6 @@ export class Registrations {
     this.registrationToView.set(null);
   }
 
-  onDelete(registration: Registration): void { }
-
   onOpenPersonModal(registration: Registration, type: EntityType): void {
     if (type === 'student') {
       this.personModalData.set({
@@ -205,5 +204,23 @@ export class Registrations {
 
   onYearChange(yearId: number | null): void {
     this.selectedYear.set(yearId);
+  }
+
+  isDeleteModalOpen = signal(false);
+  registrationToDelete = signal<Registration | null>(null);
+
+  onDelete(registration: Registration): void {
+    this.registrationToDelete.set(registration);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.registrationToDelete.set(null);
+  }
+
+  onRegistrationDeleted(): void {
+    this.onCloseDeleteModal();
+    this.fetchRegistrations();
   }
 }

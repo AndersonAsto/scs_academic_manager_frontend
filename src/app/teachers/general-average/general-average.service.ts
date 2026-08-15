@@ -165,4 +165,20 @@ export class GeneralAverageService {
     );
     return res.data[0]?.overall_course_average ?? null;
   }
+
+  async downloadDetailedReport(registrationId: number, yearId: number): Promise<void> {
+    const blob = await firstValueFrom(
+      this.http.get(`${this.base}/academic-records/student-report/excel`, {
+        params: { registration_id: registrationId, year_id: yearId },
+        responseType: 'blob',
+      }),
+    );
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'reporte-academico.xlsx';
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
 }

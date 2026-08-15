@@ -6,11 +6,6 @@
             <p class="subtitle">Gestiona los horarios disponibles.</p>
         </div>
 
-        <button class="btn-primary" (click)="onOpenCreateSchoolDays()">
-            <i class="fa-solid fa-plus"></i>
-            <span>Agregar Días Lectivos</span>
-        </button>
-
         <button class="btn-primary" (click)="onAdd()">
             <i class="fa-solid fa-plus"></i>
             <span>Agregar Horario</span>
@@ -182,6 +177,24 @@
                 Limpiar
             </button>
 
+            <button class="btn-primary" (click)="onOpenCreateSchoolDays()">
+                <i class="fa-solid fa-plus"></i>
+                <span>Agregar Sesiones</span>
+            </button>
+
+            <button class="btn-tertiary" (click)="onOpenDeleteSchoolDaysBySchedule()"
+                [disabled]="selectedYear() === null">
+
+                <i class="fa-solid fa-trash"></i>
+                <span>Eliminar Sesiones</span>
+
+            </button>
+
+            <button class="btn-primary" (click)="onOpenReportSchedules()">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>Reporte de Horarios</span>
+            </button>
+
         </div>
 
     </div>
@@ -264,27 +277,22 @@
 </div>
 
 
-<app-create-update-schedules
-    [isOpen]="isFormModalOpen()"
-    [schedule]="scheduleToEdit()"
-    (closeModal)="onCloseFormModal()"
-    (saved)="onSaved()"
-/>
+<app-create-update-schedules [isOpen]="isFormModalOpen()" [schedule]="scheduleToEdit()"
+    (closeModal)="onCloseFormModal()" (saved)="onSaved()" />
 
-<app-create-school-days-by-schedules
-  [isOpen]="isCreateSchoolDaysModalOpen()"
-  (closeModal)="onCloseCreateSchoolDays()"
-  (saved)="onSchoolDaysCreated()"
-/>
+<app-create-school-days-by-schedules [isOpen]="isCreateSchoolDaysModalOpen()" (closeModal)="onCloseCreateSchoolDays()"
+    (saved)="onSchoolDaysCreated()" />
 
-<app-school-days-by-schedules
-  [isOpen]="isSchoolDaysModalOpen()"
-  [schedule]="scheduleSelected()"
-  (closeModal)="onCloseSchoolDaysModal()"
-/>
+<app-school-days-by-schedules [isOpen]="isSchoolDaysModalOpen()" [schedule]="scheduleSelected()"
+    (closeModal)="onCloseSchoolDaysModal()" />
 
-<app-info-schedules
-    [isOpen]="isInfoModalOpen()"
-    [schedule]="scheduleToView()"
-    (closeModal)="onCloseInfoModal()"
-/>
+<app-info-schedules [isOpen]="isInfoModalOpen()" [schedule]="scheduleToView()" (closeModal)="onCloseInfoModal()" />
+
+<app-report-schedules [isOpen]="isReportSchedulesModalOpen()" [years]="years()" [grades]="grades()"
+    [sections]="sections()" (closeModal)="onCloseReportSchedules()" />
+
+<app-delete-schedules [isOpen]="isDeleteModalOpen()" [schedule]="scheduleToDelete()" (closeModal)="onCloseDeleteModal()"
+    (deleted)="onDeleted()" />
+
+<app-delete-school-days-by-schedule [isOpen]="isDeleteSchoolDaysByScheduleModalOpen()" [year]="selectedYearObject()"
+    (closeModal)="onCloseDeleteSchoolDaysBySchedule()" (deleted)="onSchoolDaysByScheduleDeleted()" />

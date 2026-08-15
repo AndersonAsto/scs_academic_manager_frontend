@@ -68,9 +68,15 @@
     (saved)="onSaved()"
 />
 
-
 <app-info-grade
     [isOpen]="isInfoModalOpen()"
     [grade]="gradeToView()"
     (closeModal)="onCloseInfoModal()"
+/>
+
+<app-delete-grade
+    [isOpen]="isDeleteModalOpen()"
+    [grade]="gradeToDelete()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onDeleted()"
 />

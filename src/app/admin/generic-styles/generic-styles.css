@@ -216,3 +216,25 @@
     font-size:13px;
     color:#6b7a67;
 }
+
+.btn-tertiary {
+    background: #b3412f;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+
+.icon-btn.restore {
+    color: #2f855a;
+}
+
+.icon-btn.restore:hover {
+    background: #f0fff4;
+    color: #276749;
+}

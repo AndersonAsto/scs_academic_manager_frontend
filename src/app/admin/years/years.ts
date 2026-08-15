@@ -4,10 +4,11 @@ import { Year } from './years.model';
 import { YearService } from './years.service';
 import { InfoYear } from './info-year/info-year';
 import { CreateUpdateYears } from './create-update-years/create-update-years';
+import { DeleteYear } from './delete-year/delete-year';
 
 @Component({
   selector: 'app-years',
-  imports: [FormsModule, InfoYear, CreateUpdateYears],
+  imports: [FormsModule, InfoYear, CreateUpdateYears, DeleteYear],
   templateUrl: './years.html',
   styleUrl: './years.css',
   standalone: true
@@ -85,7 +86,22 @@ export class Years {
     this.yearToView.set(null);
   }
 
-  onDelete(year: Year): void {
+  isDeleteModalOpen = signal(false);
+  yearToDelete = signal<Year | null>(null);
 
+  onDelete(year: Year): void {
+    this.yearToDelete.set(year);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.yearToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.yearToDelete.set(null);
+    this.fetchYears();
   }
 }

@@ -47,27 +47,60 @@
   @if (isLoadingGeneralAverage()) {
   <p class="state-message">Cargando información...</p>
   } @else if (selectedChild(); as child) {
+
   <div class="stat-card">
-    <span class="stat-card-label">Promedio general del año — {{ child.grade }} {{ child.section }}</span>
-    <span class="stat-card-value">{{ generalAverage() ?? '-' }}</span>
+    <span class="stat-card-label">
+      Promedio general del año — {{ child.grade }} {{ child.section }}
+    </span>
+
+    <span class="stat-card-value">
+      {{ generalAverage() ?? '-' }}
+    </span>
+
     <span class="status-badge" [class.inactive]="!hasGeneralAverage()">
       {{ hasGeneralAverage() ? 'Calculado' : 'Aún no calculado' }}
     </span>
   </div>
 
   <div class="filters-content">
-    <button type="button" class="btn-secondary" (click)="openCourseSelect('records')">
+
+    <button type="button" class="btn-primary" (click)="downloadDetailedReport()"
+      [disabled]="isDownloadingDetailed(child.registration_id)" title="Descargar reporte académico detallado en Excel">
+      <i class="fa-solid fa-file-excel"></i>
+
+      @if (isDownloadingDetailed(child.registration_id)) {
+      Generando Excel...
+      } @else {
+      Descargar Excel
+      }
+    </button>
+
+    <button type="button" class="btn-primary" (click)="downloadAnnualReport()"
+      [disabled]="isDownloadingAnnualReport(child.registration_id)" title="Descargar boleta final en PDF">
+      <i class="fa-solid fa-file-pdf"></i>
+
+      @if (isDownloadingAnnualReport(child.registration_id)) {
+      Generando boleta...
+      } @else {
+      Descargar Boleta
+      }
+    </button>
+
+    <button type="button" class="btn-primary" (click)="openCourseSelect('records')">
       <i class="fa-solid fa-list-check"></i>
       Registro diario por curso
     </button>
-    <button type="button" class="btn-secondary" (click)="openCourseSelect('blocks')">
+
+    <button type="button" class="btn-primary" (click)="openCourseSelect('blocks')">
       <i class="fa-solid fa-layer-group"></i>
       Promedios por bloque
     </button>
-    <button type="button" class="btn-secondary" (click)="openCourseSelect('course')">
+
+    <button type="button" class="btn-primary" (click)="openCourseSelect('course')">
       <i class="fa-solid fa-book"></i>
       Promedio por curso
     </button>
+
   </div>
   }
 

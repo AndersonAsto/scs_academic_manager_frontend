@@ -37,4 +37,13 @@ export class SchoolDaysByScheduleService {
     update(id: number, payload: UpdateSchoolDayBySchedulePayload): Observable<SchoolDayBySchedule> {
         return this.http.put<SchoolDayBySchedule>(`${this.baseUrl}/update/${id}`, payload);
     }
+
+    deleteByYear(
+        yearId: number,
+        del: 0 | 1
+    ): Observable<{ message: string }> {
+        return this.http.delete<{ message: string }>(
+            `${this.baseUrl}/delete/${yearId}/${del}`
+        );
+    }
 }

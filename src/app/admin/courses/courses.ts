@@ -4,11 +4,12 @@ import { CourseService } from './courses.service';
 import { Course } from './courses.model';
 import { CreationUpdateCourses } from './creation-update-courses/creation-update-courses';
 import { CourseInfo } from './course-info/course-info';
+import { DeleteCourse } from './delete-course/delete-course';
 
 @Component({
   selector: 'app-courses',
   standalone: true,
-  imports: [FormsModule, CreationUpdateCourses, CourseInfo],
+  imports: [FormsModule, CreationUpdateCourses, CourseInfo, DeleteCourse],
   templateUrl: './courses.html',
   styleUrl: './courses.css',
 })
@@ -85,13 +86,22 @@ export class Courses {
     this.courseToView.set(null);
   }
 
-  onDelete(course: Course): void {
-    const confirmed = confirm(`¿Eliminar permanentemente el curso "${course.course}"? Esta acción no se puede deshacer.`);
-    if (!confirmed) return;
+  isDeleteModalOpen = signal(false);
+  courseToDelete = signal<Course | null>(null);
 
-    this.courseService.delete(course.id, 1).subscribe({
-      next: () => this.fetchCourses(),
-      error: () => this.error.set('No se pudo eliminar el curso.')
-    });
+  onDelete(course: Course): void {
+    this.courseToDelete.set(course);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.courseToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.courseToDelete.set(null);
+    this.fetchCourses();
   }
 }

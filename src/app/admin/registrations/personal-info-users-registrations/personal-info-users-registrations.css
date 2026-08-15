@@ -293,3 +293,350 @@
 .field select:focus {
   border-color: #4f7a42;
 }
+
+/* =========================================================
+   GESTIÓN DE ESTADO
+   ========================================================= */
+
+.status-management {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.status-management-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.status-management-header > div {
+  flex: 1;
+}
+
+.status-management-header h3 {
+  margin: 0 0 5px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.status-management-header p {
+  margin: 0;
+  max-width: 460px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   ALERTAS TEMPORALES
+   ========================================================= */
+
+.status-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0 0 16px;
+  padding: 10px 13px;
+
+  border-radius: 9px;
+
+  font-size: 13px;
+  line-height: 1.4;
+
+  animation: status-alert-in .2s ease-out;
+}
+
+.status-alert i {
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.status-alert.success {
+  color: #2f603d;
+  background: #f1f8f3;
+  border: 1px solid #b9dcc1;
+}
+
+.status-alert.error {
+  color: #9f3c2d;
+  background: #fdf1ef;
+  border: 1px solid #efc9c1;
+}
+
+@keyframes status-alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   OPCIÓN DESACTIVAR
+   ========================================================= */
+
+.critical-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  padding: 16px 18px;
+
+  border: 1px solid #e6c4bd;
+  border-radius: 10px;
+
+  background: #fdf5f3;
+}
+
+.critical-warning .option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  background: #f5ddd8;
+  color: #a74334;
+
+  font-size: 17px;
+}
+
+.critical-warning .option-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.critical-warning .option-content h3 {
+  margin: 0 0 6px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #84372c;
+}
+
+.critical-warning .option-content p {
+  margin: 0 0 6px;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: #65443f;
+}
+
+.critical-warning .option-content span {
+  display: block;
+
+  font-size: 12px;
+  line-height: 1.5;
+
+  color: #79534d;
+}
+
+
+/* =========================================================
+   BOTÓN DESACTIVAR
+   ========================================================= */
+
+.btn-deactivate {
+  flex-shrink: 0;
+
+  padding: 9px 15px;
+
+  border: 1px solid #b3412f;
+  border-radius: 7px;
+
+  background: #b3412f;
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background .2s,
+    border-color .2s,
+    transform .15s;
+}
+
+.btn-deactivate:hover:not(:disabled) {
+  background: #963726;
+  border-color: #963726;
+}
+
+.btn-deactivate:active:not(:disabled) {
+  transform: scale(.97);
+}
+
+.btn-deactivate:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   OPCIÓN RESTAURAR
+   ========================================================= */
+
+.restore-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+
+  padding: 16px 18px;
+
+  border: 1px solid #9bc5a5;
+  border-radius: 10px;
+
+  background: #f4faf5;
+}
+
+.restore-option .option-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  background: #dcefe1;
+  color: #39734a;
+
+  font-size: 17px;
+}
+
+.restore-option .option-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.restore-option .option-content h3 {
+  margin: 0 0 6px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #2f603d;
+}
+
+.restore-option .option-content p {
+  margin: 0 0 6px;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: #405c47;
+}
+
+.restore-option .option-content span {
+  display: block;
+
+  font-size: 12px;
+  line-height: 1.5;
+
+  color: #52725a;
+}
+
+
+/* =========================================================
+   BOTÓN RESTAURAR
+   ========================================================= */
+
+.btn-restore {
+  flex-shrink: 0;
+
+  padding: 9px 15px;
+
+  border: 1px solid #39734a;
+  border-radius: 7px;
+
+  background: #39734a;
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background .2s,
+    border-color .2s,
+    transform .15s;
+}
+
+.btn-restore:hover:not(:disabled) {
+  background: #2f603d;
+  border-color: #2f603d;
+}
+
+.btn-restore:active:not(:disabled) {
+  transform: scale(.97);
+}
+
+.btn-restore:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .modal-panel {
+    max-width: 100%;
+  }
+
+  .status-management-header {
+    flex-direction: column;
+  }
+
+  .critical-warning,
+  .restore-option {
+    flex-wrap: wrap;
+  }
+
+  .critical-warning .option-content,
+  .restore-option .option-content {
+    flex-basis: calc(100% - 52px);
+  }
+
+  .btn-deactivate,
+  .btn-restore {
+    width: 100%;
+    margin-top: 4px;
+  }
+}
+
+.modal-form {
+    padding: 20px 24px 0;
+}
+
+.status-management {
+    margin: 24px 24px 0;
+    padding: 20px 0 24px;
+    border-top: 1px solid #e5e7eb;
+}

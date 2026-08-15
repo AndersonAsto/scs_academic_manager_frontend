@@ -5,10 +5,11 @@ import { SchoolDaysService } from './school-days.service';
 import { InfoSchoolDays } from './info-school-days/info-school-days';
 import { CreateSchoolDays } from './create-school-days/create-school-days';
 import { UpdateSchoolDays } from './update-school-days/update-school-days';
+import { DeleteSchoolDays } from './delete-school-days/delete-school-days';
 
 @Component({
   selector: 'app-school-days',
-  imports: [FormsModule, InfoSchoolDays, CreateSchoolDays, UpdateSchoolDays],
+  imports: [FormsModule, InfoSchoolDays, CreateSchoolDays, UpdateSchoolDays, DeleteSchoolDays],
   standalone: true,
   templateUrl: './school-days.html',
   styleUrl: './school-days.css',
@@ -110,10 +111,6 @@ export class SchoolDays {
     this.schoolDayToView.set(null);
   }
 
-  onDelete(schoolDay: SchoolDay): void {
-
-  }
-
   years = computed(() => {
     const years = this.schoolDay()
       .map(sd => sd.teaching_block.year);
@@ -154,4 +151,41 @@ export class SchoolDays {
     this.selectedYear.set(yearId);
     this.selectedTeachingBlock.set(null);
   }
+
+  isDeleteModalOpen = signal(false);
+  yearToDelete = signal<number | null>(null);
+
+  onDelete(): void {
+
+    const yearId = this.selectedYear();
+
+    if (yearId === null) {
+      return;
+    }
+
+    this.yearToDelete.set(yearId);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.yearToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.yearToDelete.set(null);
+
+    this.selectedYear.set(null);
+    this.selectedTeachingBlock.set(null);
+
+    this.fetchSchoolDays();
+  }
+
+  selectedYearObject = computed(() => {
+    const id = this.selectedYear();
+    if (id === null) return null;
+
+    return this.years().find(y => y.id === id) ?? null;
+  });
 }

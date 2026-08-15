@@ -69,3 +69,10 @@
 />
 
 <app-info-time-slots [isOpen]="isInfoModalOpen()" [timeSlot]="timeSlotToView()" (closeModal)="onCloseInfoModal()" />
+
+<app-delete-time-slots
+    [isOpen]="isDeleteModalOpen()"
+    [timeSlot]="timeSlotToDelete()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onDeleted()"
+/>

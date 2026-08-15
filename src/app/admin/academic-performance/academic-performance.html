@@ -81,6 +81,7 @@
             <th>Registros</th>
             <th>Bloques</th>
             <th>Curso</th>
+            <th>Reportes</th>
           </tr>
         </thead>
         <tbody>
@@ -108,6 +109,26 @@
               <td>
                 <button type="button" class="btn-secondary btn-sm" (click)="openCourseSelect(student, 'course')">
                   <i class="fa-solid fa-book"></i>
+                </button>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn-secondary btn-sm"
+                  (click)="downloadDetailedReport(student)"
+                  [disabled]="isDownloading(student.registration_id)"
+                  title="Descargar detallado (Excel)"
+                >
+                  <i class="fa-solid fa-file-excel"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn-secondary btn-sm"
+                  (click)="downloadAnnualReport(student)"
+                  [disabled]="isDownloadingAnnualReport(student.registration_id)"
+                  title="Descargar boleta final (PDF)"
+                >
+                  <i class="fa-solid fa-file-pdf"></i>
                 </button>
               </td>
             </tr>

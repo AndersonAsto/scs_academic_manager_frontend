@@ -6,6 +6,8 @@ import {
   AcademicRecordDetail,
   BlockAverageDetail,
 } from './student-academic-record.service';
+import { AnnualReportService } from '../../admin/academic-performance/annual-report.service';
+import { AnnualReportPdfService } from '../../admin/academic-performance/annual-report-pdf.service';
 
 type DetailType = 'records' | 'blocks' | 'course' | null;
 
@@ -17,6 +19,9 @@ type DetailType = 'records' | 'blocks' | 'course' | null;
 })
 export class StudentAcademicRecord {
   private service = inject(StudentAcademicRecordService);
+
+  private annualReport = inject(AnnualReportService);
+  private annualReportPdf = inject(AnnualReportPdfService);
 
   children = signal<ChildRegistration[]>([]);
   isLoadingChildren = signal(false);
@@ -151,5 +156,82 @@ export class StudentAcademicRecord {
 
   attendanceClass(attendance: AcademicRecordDetail['attendance']): string {
     return attendance ? `attendance-${attendance}` : 'attendance-none';
+  }
+
+  downloadingDetailedIds = signal<Set<number>>(new Set());
+  downloadingAnnualReportIds = signal<Set<number>>(new Set());
+
+  isDownloadingDetailed(registrationId: number): boolean {
+    return this.downloadingDetailedIds().has(registrationId);
+  }
+
+  isDownloadingAnnualReport(registrationId: number): boolean {
+    return this.downloadingAnnualReportIds().has(registrationId);
+  }
+
+  async downloadDetailedReport() {
+    const child = this.selectedChild();
+
+    if (!child) return;
+
+    const registrationId = child.registration_id;
+
+    this.downloadingDetailedIds.update((set) => {
+      const next = new Set(set);
+      next.add(registrationId);
+      return next;
+    });
+
+    try {
+      await this.service.downloadDetailedReport(
+        child.registration_id,
+        child.year_id,
+      );
+    } finally {
+      this.downloadingDetailedIds.update((set) => {
+        const next = new Set(set);
+        next.delete(registrationId);
+        return next;
+      });
+    }
+  }
+
+  async downloadAnnualReport() {
+    const child = this.selectedChild();
+
+    if (!child) return;
+
+    const registrationId = child.registration_id;
+
+    this.downloadingAnnualReportIds.update((set) => {
+      const next = new Set(set);
+      next.add(registrationId);
+      return next;
+    });
+
+    try {
+      const data = await this.annualReport.getAnnualReportData(
+        child.registration_id,
+        child.year_id,
+        child.grade_id,
+        child.section_id,
+        {
+          names: child.names,
+          fathers_surname: child.fathers_surname,
+          mothers_surname: child.mothers_surname,
+        },
+        child.grade,
+        child.section,
+        child.year,
+      );
+
+      await this.annualReportPdf.generate(data);
+    } finally {
+      this.downloadingAnnualReportIds.update((set) => {
+        const next = new Set(set);
+        next.delete(registrationId);
+        return next;
+      });
+    }
   }
 }

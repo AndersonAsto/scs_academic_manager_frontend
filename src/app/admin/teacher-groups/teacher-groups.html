@@ -216,3 +216,10 @@
     [teacherGroup]="teacherGroupToView()"
     (closeModal)="onCloseInfoModal()"
 />
+
+<app-delete-teacher-groups
+    [isOpen]="isDeleteModalOpen()"
+    [teacherGroup]="teacherGroupToDelete()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onDeleted()"
+/>

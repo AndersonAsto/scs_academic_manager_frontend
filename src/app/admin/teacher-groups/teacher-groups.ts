@@ -4,10 +4,11 @@ import { TeacherGroup } from './teacher-groups.model';
 import { TeacherGroupsService } from './teacher-groups.service';
 import { InfoTeacherGroups } from './info-teacher-groups/info-teacher-groups';
 import { CreateUpdateTeacherGroups } from './create-update-teacher-groups/create-update-teacher-groups';
+import { DeleteTeacherGroups } from './delete-teacher-groups/delete-teacher-groups';
 
 @Component({
   selector: 'app-teacher-groups',
-  imports: [FormsModule, InfoTeacherGroups, CreateUpdateTeacherGroups],
+  imports: [FormsModule, InfoTeacherGroups, CreateUpdateTeacherGroups, DeleteTeacherGroups],
   templateUrl: './teacher-groups.html',
   styleUrl: './teacher-groups.css',
 })
@@ -134,8 +135,6 @@ export class TeacherGroups {
     this.teacherGroupToView.set(null);
   }
 
-  onDelete(teacherGroup: TeacherGroup): void { }
-
   selectedYear = signal<number | null>(null);
   selectedCourse = signal<number | null>(null);
   selectedGrade = signal<number | null>(null);
@@ -200,5 +199,25 @@ export class TeacherGroups {
 
   onYearChange(yearId: number | null): void {
     this.selectedYear.set(yearId);
+  }
+
+  isDeleteModalOpen = signal(false);
+  teacherGroupToDelete = signal<TeacherGroup | null>(null);
+
+  onDelete(teacherGroup: TeacherGroup): void {
+    this.teacherGroupToDelete.set(teacherGroup);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.teacherGroupToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.teacherGroupToDelete.set(null);
+
+    this.fetchTeacherGroups();
   }
 }

@@ -4,11 +4,12 @@ import { Section } from './sections.model';
 import { SectionService } from './sections.service';
 import { InfoSection } from './info-section/info-section';
 import { CreateUpdateSection } from './create-update-section/create-update-section';
+import { DeleteSection } from './delete-section/delete-section';
 
 @Component({
   selector: 'app-sections',
   standalone: true,
-  imports: [FormsModule, InfoSection, CreateUpdateSection],
+  imports: [FormsModule, InfoSection, CreateUpdateSection, DeleteSection],
   templateUrl: './sections.html',
   styleUrl: './sections.css',
 })
@@ -85,7 +86,22 @@ export class Sections {
     this.sectionToView.set(null);
   }
 
-  onDelete(section: Section): void {
+  isDeleteModalOpen = signal(false);
+  sectionToDelete = signal<Section | null>(null);
 
+  onDelete(section: Section): void {
+    this.sectionToDelete.set(section);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.sectionToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.sectionToDelete.set(null);
+    this.fetchSections();
   }
 }

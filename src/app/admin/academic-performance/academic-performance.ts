@@ -9,6 +9,8 @@ import {
   AcademicRecordDetail,
   BlockAverageDetail,
 } from './academic-performance.service';
+import { AnnualReportService } from './annual-report.service';
+import { AnnualReportPdfService } from './annual-report-pdf.service';
 
 type DetailType = 'records' | 'blocks' | 'course' | null;
 
@@ -182,5 +184,72 @@ export class AcademicPerformance {
 
   attendanceClass(attendance: AcademicRecordDetail['attendance']): string {
     return attendance ? `attendance-${attendance}` : 'attendance-none';
+  }
+
+  // generación de reporte
+  downloadingIds = signal<Set<number>>(new Set());
+  downloadingAnnualReportIds = signal<Set<number>>(new Set());
+
+  isDownloading(registrationId: number): boolean {
+    return this.downloadingIds().has(registrationId);
+  }
+
+  isDownloadingAnnualReport(registrationId: number): boolean { // NUEVO
+    return this.downloadingAnnualReportIds().has(registrationId);
+  }
+
+  async downloadDetailedReport(student: StudentPerformanceRow) {
+    const yearId = this.selectedYearId();
+    if (!yearId) return;
+
+    this.downloadingIds.update((set) => new Set(set).add(student.registration_id));
+
+    try {
+      await this.service.downloadDetailedReport(student.registration_id, yearId);
+    } finally {
+      this.downloadingIds.update((set) => {
+        const next = new Set(set);
+        next.delete(student.registration_id);
+        return next;
+      });
+    }
+  }
+
+  private annualReport = inject(AnnualReportService);
+  private annualReportPdf = inject(AnnualReportPdfService);
+
+  async downloadAnnualReport(student: StudentPerformanceRow) {
+    const yearId = this.selectedYearId();
+    const gradeId = this.selectedGradeId();
+    const sectionId = this.selectedSectionId();
+    if (!yearId || !gradeId || !sectionId) return;
+
+    const year = this.years().find((y) => y.id === yearId);
+    const grade = this.grades().find((g) => g.id === gradeId);
+    const section = this.sections().find((s) => s.id === sectionId);
+    if (!year || !grade || !section) return;
+
+    this.downloadingAnnualReportIds.update((set) => new Set(set).add(student.registration_id)); // NUEVO
+
+    try {
+      const data = await this.annualReport.getAnnualReportData(
+        student.registration_id,
+        yearId,
+        gradeId,
+        sectionId,
+        { names: student.names, fathers_surname: student.fathers_surname, mothers_surname: student.mothers_surname },
+        grade.grade,
+        section.section,
+        year.year,
+      );
+
+      await this.annualReportPdf.generate(data);
+    } finally { // NUEVO
+      this.downloadingAnnualReportIds.update((set) => {
+        const next = new Set(set);
+        next.delete(student.registration_id);
+        return next;
+      });
+    }
   }
 }

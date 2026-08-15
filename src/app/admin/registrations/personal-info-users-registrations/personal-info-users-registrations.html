@@ -107,7 +107,123 @@
                     {{ loading() ? 'Guardando...' : 'Guardar Cambios' }}
                 </button>
             </div>
+
+
         </form>
+
+        <div class="status-management">
+
+            <div class="status-management-header">
+
+                <div>
+                    <h3>Estado del registro</h3>
+
+                    <p>
+                        Gestiona la disponibilidad de los datos
+                        {{ isParent ? 'del apoderado' : 'del estudiante' }}
+                        en el sistema.
+                    </p>
+                </div>
+
+                <span class="status-badge" [class.inactive]="!isActive()">
+                    {{ isActive() ? 'Activo' : 'Inactivo' }}
+                </span>
+
+            </div>
+
+            @if (isActive()) {
+
+            <div class="critical-warning">
+
+                <div class="option-icon">
+                    <i class="fa-solid fa-user-slash"></i>
+                </div>
+
+                <div class="option-content">
+
+                    <h3>
+                        Desactivar {{ isParent ? 'apoderado' : 'estudiante' }}
+                    </h3>
+
+                    <p>
+                        Los datos permanecerán almacenados en el sistema,
+                        pero el registro dejará de estar activo.
+                    </p>
+
+                    <span>
+                        @if (isParent) {
+
+                        También se desactivará su información personal
+                        y su cuenta de usuario. Las matrículas existentes
+                        no serán eliminadas.
+
+                        } @else {
+
+                        También se desactivará la información personal
+                        asociada al estudiante. Las matrículas y demás
+                        registros relacionados no serán eliminados
+                        automáticamente.
+
+                        }
+                    </span>
+
+                </div>
+
+                <button type="button" class="btn-deactivate" (click)="onDeactivate()" [disabled]="submittingStatus()">
+
+                    {{ submittingStatus() ? 'Procesando...' : 'Desactivar' }}
+
+                </button>
+
+            </div>
+
+            } @else {
+
+            <div class="restore-option">
+
+                <div class="option-icon">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </div>
+
+                <div class="option-content">
+
+                    <h3>
+                        Restaurar {{ isParent ? 'apoderado' : 'estudiante' }}
+                    </h3>
+
+                    <p>
+                        El registro volverá a estar activo y podrá ser
+                        utilizado nuevamente por el sistema.
+                    </p>
+
+                    <span>
+                        @if (isParent) {
+
+                        Se reactivará el apoderado, su información
+                        personal y su usuario asociado.
+
+                        } @else {
+
+                        Se reactivará el estudiante y su información
+                        personal asociada.
+
+                        }
+                    </span>
+
+                </div>
+
+                <button type="button" class="btn-restore" (click)="onRestore()" [disabled]="submittingStatus()">
+
+                    {{ submittingStatus() ? 'Procesando...' : 'Restaurar' }}
+
+                </button>
+
+            </div>
+
+            }
+
+        </div>
+
     </div>
 </div>
 }

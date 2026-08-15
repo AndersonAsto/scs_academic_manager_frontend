@@ -7,7 +7,7 @@
         </div>
         <button class="btn-primary" (click)="onAdd()">
             <i class="fa-solid fa-plus"></i>
-            <span>Agregar Días Lectivos</span>
+            <span>Agregar Ponderaciones</span>
         </button>
     </div>
 
@@ -41,6 +41,16 @@
             <button class="btn-clear" (click)="clearFilters()">
                 <i class="fa-solid fa-rotate-left"></i>
                 Limpiar
+            </button>
+
+            <button
+                class="btn-tertiary"
+                (click)="onDelete()"
+                [disabled]="selectedYear() === null">
+
+                <i class="fa-solid fa-trash"></i>
+                Eliminar Ponderaciones
+
             </button>
         </div>
     </div>
@@ -85,9 +95,6 @@
                 <button class="icon-btn edit" (click)="onEdit(weightings)" aria-label="Actualizar">
                     <i class="fa-solid fa-pen"></i>
                 </button>
-                <button class="icon-btn delete" (click)="onDelete(weightings)" aria-label="Eliminar">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
             </div>
 
         </div>
@@ -115,4 +122,12 @@
     [isOpen]="isInfoModalOpen()"
     [weighting]="weightingToView()"
     (closeModal)="onCloseInfoModal()"
+/>
+
+<app-delete-weightings
+    [isOpen]="isDeleteModalOpen()"
+    [yearId]="yearToDelete()"
+    [year]="selectedYearObject()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onDeleted()"
 />

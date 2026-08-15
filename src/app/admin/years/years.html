@@ -73,3 +73,10 @@
     [year]="yearToView()"
     (closeModal)="onCloseInfoModal()"
 />
+
+<app-delete-year
+    [isOpen]="isDeleteModalOpen()"
+    [year]="yearToDelete()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onDeleted()"
+/>

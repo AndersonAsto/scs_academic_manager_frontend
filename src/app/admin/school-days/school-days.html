@@ -60,6 +60,11 @@
             </div>
 
             <button class="btn-clear" (click)="clearFilters()"><i class="fa-solid fa-rotate-left"></i>Limpiar</button>
+
+            <button class="btn-tertiary" (click)="onDelete()" [disabled]="selectedYear() === null">
+                <i class="fa-solid fa-trash"></i>
+                Eliminar Días Lectivos
+            </button>
         </div>
     </div>
 
@@ -108,9 +113,6 @@
                 <button class="icon-btn edit" (click)="onEdit(schoolDay)" aria-label="Actualizar">
                     <i class="fa-solid fa-pen"></i>
                 </button>
-                <button class="icon-btn delete" (click)="onDelete(schoolDay)" aria-label="Eliminar">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
             </div>
 
         </div>
@@ -120,21 +122,17 @@
 
 </div>
 
-<app-create-school-days
-    [isOpen]="isCreateModalOpen()"
-    (closeModal)="onCloseCreateModal()"
-    (saved)="onSaved()"
-/>
+<app-create-school-days [isOpen]="isCreateModalOpen()" (closeModal)="onCloseCreateModal()" (saved)="onSaved()" />
 
-<app-update-school-days
-    [isOpen]="isUpdateModalOpen()"
-    [schoolDay]="schoolDayToEdit()"
-    (closeModal)="onCloseUpdateModal()"
-    (saved)="onSaved()"
-/>
+<app-update-school-days [isOpen]="isUpdateModalOpen()" [schoolDay]="schoolDayToEdit()"
+    (closeModal)="onCloseUpdateModal()" (saved)="onSaved()" />
 
-<app-info-school-days
-    [isOpen]="isInfoModalOpen()"
-    [schoolDay]="schoolDayToView()"
-    (closeModal)="onCloseInfoModal()"
+<app-info-school-days [isOpen]="isInfoModalOpen()" [schoolDay]="schoolDayToView()" (closeModal)="onCloseInfoModal()" />
+
+<app-delete-school-days
+    [isOpen]="isDeleteModalOpen()" 
+    [yearId]="yearToDelete()" 
+    [year]="selectedYearObject()"
+    (closeModal)="onCloseDeleteModal()" 
+    (deleted)="onDeleted()"
 />

@@ -29,26 +29,32 @@
             <div class="filter-select">
                 <i class="fa-solid fa-calendar-days"></i>
 
-                <select [ngModel]="selectedYear()" (ngModelChange)="selectedYear.set($event)">
+                <select [ngModel]="selectedYear()" (ngModelChange)="selectedYear.set($event !== null ? +$event : null)">
+
                     <option [ngValue]="null">
                         Todos los años
                     </option>
 
                     @for (year of years(); track year.id) {
+
                     <option [ngValue]="year.id">
                         {{ year.year }}
                     </option>
+
                     }
 
                 </select>
             </div>
 
             <button class="btn-clear" (click)="clearFilters()">
-
                 <i class="fa-solid fa-rotate-left"></i>
-
                 Limpiar
+            </button>
 
+            <button class="btn-tertiary" (click)="onDelete()" [disabled]="selectedYear() === null">
+
+                <i class="fa-solid fa-trash"></i>
+                Eliminar Bloques
             </button>
 
         </div>
@@ -99,9 +105,6 @@
                 <button class="icon-btn edit" (click)="onEdit(teachingBlock)" aria-label="Actualizar">
                     <i class="fa-solid fa-pen"></i>
                 </button>
-                <button class="icon-btn delete" (click)="onDelete(teachingBlock)" aria-label="Eliminar">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
             </div>
 
         </div>
@@ -111,21 +114,17 @@
 
 </div>
 
-<app-create-teaching-blocks
-    [isOpen]="isCreateModalOpen()"
-    (closeModal)="onCloseCreateModal()"
-    (saved)="onSaved()"
-/>
+<app-create-teaching-blocks [isOpen]="isCreateModalOpen()" (closeModal)="onCloseCreateModal()" (saved)="onSaved()" />
 
-<app-update-teaching-block
-    [isOpen]="isUpdateModalOpen()"
-    [teachingBlock]="teachingToEdit()"
-    (closeModal)="onCloseUpdateModal()"
-    (saved)="onSaved()"
-/>
+<app-update-teaching-block [isOpen]="isUpdateModalOpen()" [teachingBlock]="teachingToEdit()"
+    (closeModal)="onCloseUpdateModal()" (saved)="onSaved()" />
 
-<app-info-teaching-blocks
-    [isOpen]="isInfoModalOpen()"
-    [teachingBlock]="teachingToView()"
-    (closeModal)="onCloseInfoModal()"
-/>
+<app-info-teaching-blocks [isOpen]="isInfoModalOpen()" [teachingBlock]="teachingToView()"
+    (closeModal)="onCloseInfoModal()" />
+
+<app-delete-teaching-blocks 
+    [isOpen]="isDeleteModalOpen()" 
+    [yearId]="yearToDelete()" 
+    [year]="selectedYearObject()"
+    (closeModal)="onCloseDeleteModal()" 
+    (deleted)="onDeleted()" />

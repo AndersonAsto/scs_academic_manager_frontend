@@ -73,3 +73,10 @@
     [course]="courseToView()"
     (closeModal)="onCloseInfoModal()"
 />
+
+<app-delete-course
+    [isOpen]="isDeleteModalOpen()"
+    [course]="courseToDelete()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onDeleted()"
+/>

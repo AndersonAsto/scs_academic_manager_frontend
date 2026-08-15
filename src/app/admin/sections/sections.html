@@ -74,3 +74,9 @@
     (closeModal)="onCloseInfoModal()"
 />
 
+<app-delete-section
+    [isOpen]="isDeleteModalOpen()"
+    [section]="sectionToDelete()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onDeleted()"
+/>

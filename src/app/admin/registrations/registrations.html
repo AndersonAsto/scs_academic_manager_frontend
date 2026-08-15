@@ -151,9 +151,23 @@
                 <button class="icon-btn edit" (click)="onEdit(registration)" aria-label="Actualizar">
                     <i class="fa-solid fa-pen"></i>
                 </button>
-                <button class="icon-btn delete" (click)="onDelete(registration)" aria-label="Eliminar">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
+                @if (registration.status) {
+                    <button
+                        class="icon-btn delete"
+                        (click)="onDelete(registration)"
+                        title="Gestionar matrícula"
+                        aria-label="Gestionar matrícula">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                } @else {
+                    <button
+                        class="icon-btn restore"
+                        (click)="onDelete(registration)"
+                        title="Restaurar matrícula"
+                        aria-label="Restaurar matrícula">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                }
             </div>
 
         </div>
@@ -172,3 +186,10 @@
 
 <app-personal-info-users-registrations [isOpen]="isPersonModalOpen()" [data]="personModalData()"
     (closeModal)="onClosePersonModal()" (saved)="onPersonSaved()" />
+
+<app-delete-registrations
+    [isOpen]="isDeleteModalOpen()"
+    [registration]="registrationToDelete()"
+    (closeModal)="onCloseDeleteModal()"
+    (deleted)="onRegistrationDeleted()"
+/>

@@ -6,16 +6,21 @@ import { InfoSchedules } from './info-schedules/info-schedules';
 import { CreateUpdateSchedules } from './create-update-schedules/create-update-schedules';
 import { CreateSchoolDaysBySchedules } from './create-school-days-by-schedules/create-school-days-by-schedules';
 import { SchoolDaysBySchedules } from './school-days-by-schedules/school-days-by-schedules';
+import { ReportSchedules } from './report-schedules/report-schedules';
+import { DeleteSchedules } from './delete-schedules/delete-schedules';
+import { DeleteSchoolDaysBySchedule } from './delete-school-days-by-schedule/delete-school-days-by-schedule';
 
 @Component({
   selector: 'app-schedules',
-  imports: [FormsModule, InfoSchedules, CreateUpdateSchedules, CreateSchoolDaysBySchedules, SchoolDaysBySchedules],
+  imports: [FormsModule, InfoSchedules, CreateUpdateSchedules, CreateSchoolDaysBySchedules, SchoolDaysBySchedules, ReportSchedules, DeleteSchedules, DeleteSchoolDaysBySchedule],
   standalone: true,
   templateUrl: './schedules.html',
   styleUrl: './schedules.css',
 })
 export class Schedules {
   private schedulesService = inject(SchedulesService);
+
+  isReportSchedulesModalOpen = signal(false);
 
   schedule = signal<Schedule[]>([]);
   loading = signal(true);
@@ -165,8 +170,6 @@ export class Schedules {
     this.scheduleToView.set(null);
   }
 
-  onDelete(schedule: Schedule): void { }
-
   // Métodos - Generar Días Lectivos por Año (Modal Global)
   onOpenCreateSchoolDays(): void {
     this.isCreateSchoolDaysModalOpen.set(true);
@@ -273,4 +276,56 @@ export class Schedules {
   onYearChange(yearId: number | null): void {
     this.selectedYear.set(yearId);
   }
+
+  onOpenReportSchedules(): void {
+    this.isReportSchedulesModalOpen.set(true);
+  }
+
+  onCloseReportSchedules(): void {
+    this.isReportSchedulesModalOpen.set(false);
+  }
+
+  isDeleteModalOpen = signal(false);
+  scheduleToDelete = signal<Schedule | null>(null);
+
+  onDelete(schedule: Schedule): void {
+    this.scheduleToDelete.set(schedule);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  onCloseDeleteModal(): void {
+    this.isDeleteModalOpen.set(false);
+    this.scheduleToDelete.set(null);
+  }
+
+  onDeleted(): void {
+    this.isDeleteModalOpen.set(false);
+    this.scheduleToDelete.set(null);
+    this.fetchSchedule();
+  }
+
+  isDeleteSchoolDaysByScheduleModalOpen = signal(false);
+
+  onOpenDeleteSchoolDaysBySchedule(): void {
+    this.isDeleteSchoolDaysByScheduleModalOpen.set(true);
+  }
+
+  onCloseDeleteSchoolDaysBySchedule(): void {
+    this.isDeleteSchoolDaysByScheduleModalOpen.set(false);
+  }
+
+  onSchoolDaysByScheduleDeleted(): void {
+    this.isDeleteSchoolDaysByScheduleModalOpen.set(false);
+    this.fetchSchedule();
+  }
+
+  selectedYearObject = computed(() => {
+    const id = this.selectedYear();
+
+    if (id === null) {
+      return null;
+    }
+
+    return this.years().find(year => year.id === id) ?? null;
+  });
 }
