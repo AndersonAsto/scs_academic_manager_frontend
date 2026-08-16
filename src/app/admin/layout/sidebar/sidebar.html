@@ -2,7 +2,14 @@
 
     <div class="sidebar-header">
         <div class="user-info">
-            <i class="fa-solid fa-school school-icon"></i>
+            @if (authService.avatarUrl(); as avatarUrl) {
+            <img [src]="avatarUrl" alt="Foto de perfil" class="user-avatar" />
+            } @else {
+            <div class="user-avatar-placeholder">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            }
+
             <div class="user-text">
                 @if (authService.currentUser(); as user) {
                 <span class="user-name">
@@ -17,7 +24,6 @@
                 </button>
                 }
             </div>
-
         </div>
     </div>
 

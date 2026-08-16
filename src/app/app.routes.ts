@@ -29,6 +29,7 @@ import { Profile } from './admin/profile/profile';
 import { AdsReceived } from './parents/ads-received/ads-received';
 import { AdsSent } from './teachers/ads-sent/ads-sent';
 import { TeacherProfile } from './teachers/teacher-profile/teacher-profile';
+import { ParentProfile } from './parents/parent-profile/parent-profile';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -109,7 +110,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: ParentsDashboard },
       { path: 'student-academic-record', component: StudentAcademicRecord },
       { path: 'ads-received', component: AdsReceived },
-      { path: 'parent-profile', component: ParentsDashboard }
+      { path: 'parent-profile', component: ParentProfile }
     ],
   },
   {

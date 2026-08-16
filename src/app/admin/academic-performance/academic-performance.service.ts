@@ -146,18 +146,39 @@ export class AcademicPerformanceService {
     }
 
     async downloadDetailedReport(registrationId: number, yearId: number): Promise<void> {
-        const blob = await firstValueFrom(
+        const response = await firstValueFrom(
             this.http.get(`${this.base}/academic-records/student-report/excel`, {
-                params: { registration_id: registrationId, year_id: yearId },
+                params: {
+                    registration_id: registrationId,
+                    year_id: yearId,
+                },
                 responseType: 'blob',
+                observe: 'response', // necesario para poder leer los headers de la respuesta
             }),
         );
 
+        const blob = response.body as Blob;
+        const fileName = this.extractFileName(response.headers.get('Content-Disposition')) ?? 'reporte_academico.xlsx';
+
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
+
         link.href = url;
-        link.download = 'reporte-academico.xlsx'; // el navegador usa el nombre real si el backend manda bien el Content-Disposition
+        link.download = fileName;
         link.click();
+
         window.URL.revokeObjectURL(url);
+    }
+
+    private extractFileName(contentDisposition: string | null): string | null {
+        if (!contentDisposition) return null;
+
+        // Soporta tanto filename="..." como filename*=UTF-8''... (RFC 5987, por si en el futuro
+        // usas caracteres especiales codificados)
+        const utf8Match = contentDisposition.match(/filename\*=UTF-8''([^;]+)/i);
+        if (utf8Match) return decodeURIComponent(utf8Match[1]);
+
+        const plainMatch = contentDisposition.match(/filename="?([^";]+)"?/i);
+        return plainMatch ? plainMatch[1] : null;
     }
 }

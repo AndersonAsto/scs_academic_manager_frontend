@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { resolveAssetUrl } from '../utils/assets';
 
 export type Role = 'Administrador' | 'Docente' | 'Estudiante' | 'Apoderado';
 
@@ -10,6 +11,7 @@ export interface SessionUser {
   id: number;
   username: string;
   role: Role;
+  profile_picture: string | null;
   personalInformation: PersonalInformation | null;
   roleProfile: Record<string, any> | null;
 }
@@ -32,6 +34,8 @@ const ROLE_HOME: Record<Role, string> = {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+
+  avatarUrl = computed(() => resolveAssetUrl(this.user()?.profile_picture ?? null));
 
   private accessToken = signal<string | null>(null);
   private user = signal<SessionUser | null>(null);
@@ -141,4 +145,11 @@ export class AuthService {
       .filter(Boolean)
       .join(' ');
   });
+
+  async refreshCurrentUser(): Promise<void> {
+    const response = await firstValueFrom(
+      this.http.get<{ user: SessionUser }>(`${environment.apiUrl}/auth/me`, { withCredentials: true }),
+    );
+    this.user.set(response.user);
+  }
 }

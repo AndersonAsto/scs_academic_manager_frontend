@@ -80,16 +80,7 @@ export class CreateUpdateTeacherGroups {
     );
   });
 
-  constructor() {
-
-    effect(() => {
-      console.log('year_id =', this.form.controls.year_id.value);
-    });
-
-    this.form.controls.year_id.valueChanges.subscribe(v => {
-      console.log('CAMBIÓ AÑO ->', v, typeof v);
-    });
-
+  constructor() {    
     this.loadYears();
     this.loadContracts();
     this.loadCourses();

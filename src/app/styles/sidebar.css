@@ -37,6 +37,11 @@
     border-bottom: 1px solid var(--glass-border);
     flex-shrink: 0;
     overflow: hidden;
+    transition: padding .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.sidebar.collapsed .sidebar-header {
+    padding: 16px 0;
 }
 
 .user-info {
@@ -46,6 +51,12 @@
     width: 100%;
     min-width: 0;
     overflow: hidden;
+    transition: gap .3s cubic-bezier(.4, 0, .2, 1), justify-content .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.sidebar.collapsed .user-info {
+    justify-content: center;
+    gap: 0;
 }
 
 .school-icon {
@@ -311,4 +322,45 @@ nav a i {
 
 .logout-text {
     white-space: nowrap;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, .35);
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: width .3s cubic-bezier(.4, 0, .2, 1), height .3s cubic-bezier(.4, 0, .2, 1), margin .3s ease;
+}
+
+.user-avatar-placeholder {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .15);
+    border: 2px solid rgba(255, 255, 255, .35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, .85);
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: width .3s cubic-bezier(.4, 0, .2, 1), height .3s cubic-bezier(.4, 0, .2, 1), font-size .3s ease, margin .3s ease;
+}
+
+.sidebar.collapsed .user-avatar,
+.sidebar.collapsed .user-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    margin: 0 auto;
+}
+
+.sidebar.collapsed .user-avatar-placeholder {
+    font-size: 20px;
 }

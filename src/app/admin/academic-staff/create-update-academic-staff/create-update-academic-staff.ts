@@ -252,11 +252,6 @@ export class CreateUpdateAcademicStaff {
   }
 
   onSubmit(): void {
-
-    console.log('Edit:', this.isEditMode);
-    console.log(this.form.invalid);
-    console.log(this.form.getRawValue());
-
     if (this.form.invalid) {
 
       this.form.markAllAsTouched();
